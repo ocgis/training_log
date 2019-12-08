@@ -14,7 +14,7 @@ ActiveRecord::Schema.define(version: 20191207164956) do
 
   create_table "people", force: :cascade do |t|
     t.string   "name"
-    t.integer  "alt_id"
+    t.integer  "altid"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

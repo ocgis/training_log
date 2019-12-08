@@ -2,8 +2,8 @@
 
 one:
   name: MyString
-  alt_id: 1
+  altid: 1
 
 two:
   name: MyString
-  alt_id: 1
+  altid: 1

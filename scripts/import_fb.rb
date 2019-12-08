@@ -16,7 +16,7 @@ def import_fb_user(path)
   end
   user_match = /\/(\d+)\./.match(avatar_tag[0]['src'])
   person_id = user_match[1].to_i
-  person_objs = Person.where({alt_id: person_id})
+  person_objs = Person.where({altid: person_id})
   if person_objs.length == 1
     person_obj = person_objs[0]
     person_obj.update({name: person_name})
@@ -24,7 +24,7 @@ def import_fb_user(path)
     puts "Updated person %d with name %s and alt id %s" % [person_obj.id, person_name, person_id]
   elsif person_objs.length == 0
     person_obj = Person.new({name: person_name,
-                             alt_id: person_id})
+                             altid: person_id})
     person_obj.save
     puts "Created person %d with name %s and alt id %s" % [person_obj.id, person_name, person_id]
   else
