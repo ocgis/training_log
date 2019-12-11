@@ -3,10 +3,69 @@ require 'pp'
 
 puts "FP importer started"
 
-TRANSLATE_TP = {'Runda:' => 'route_id',
-                'Tempo:' => 'pace',
-                'Hastighet:' => 'speed',
-                'Sträcka:' => 'distance'}
+
+def str2seconds(str)
+  mm_min_match = /^(\d+) min$/.match(str)
+  if mm_min_match
+    return mm_min_match[1].to_i * 60
+  end
+
+  hh_mm_ss_match = /^(\d\d):(\d\d):(\d\d)$/.match(str)
+  if hh_mm_ss_match
+    return (hh_mm_ss_match[1].to_i * 24 + hh_mm_ss_match[2].to_i) * 60 + hh_mm_ss_match[3].to_i
+  end
+
+  raise 'Could not convert "%s" to seconds' % str
+end
+
+
+def str2meters(str)
+  if str == ''
+    return nil
+  end
+
+  n_km_match = /^(\d+) km$/.match(str)
+  if n_km_match
+    return n_km_match[1].to_i * 1000
+  end
+
+  n_n_km_match = /^(\d+),(\d+) km$/.match(str)
+  if n_n_km_match
+    meters = (n_n_km_match[2] + '00')[0..2].to_i
+    return n_n_km_match[1].to_i * 1000 + meters
+  end
+
+  raise 'Could not convert "%s" to meters' % str
+end
+
+
+def str2kcal(str)
+  if str == ''
+    return nil
+  end
+
+  n_kcal_match = /^(\d+) kcal$/.match(str)
+  if n_kcal_match
+    return n_kcal_match[1].to_i
+  end
+
+  raise 'Could not convert "%s" to meters' % str
+end
+
+
+def str2bpm(str)
+  if str == ''
+    return nil
+  end
+
+  n_bpm_match = /^(\d+) slag\/min$/.match(str)
+  if n_bpm_match
+    return n_bpm_match[1].to_i
+  end
+
+  raise 'Could not convert "%s" to meters' % str
+end
+
 
 def import_fb_training(person_id, path)
   puts "About to parse training from " + path
@@ -32,15 +91,19 @@ def import_fb_training(person_id, path)
   end
   # puts meta_dict
   training['altid'] = meta_dict['og:url'].split('=')[-1]
-  training['type'] = meta_dict['og:title'].split(' ')[0]
+  training['kind'] = meta_dict['og:title'].split(' ')[0]
   training['date'] = meta_dict['og:title'].split(' ')[1]
   training['description'] = meta_dict['og:description']
+
+  sub_header = doc.xpath('//h2[@id="ctl00_ctl00_MainContentPlaceHolder_MainContentPlaceHolder_SubHeader"]')
+  time = sub_header.text.split(') ')[-1]
+  training['duration_s'] = str2seconds(time)
 
   doc.xpath('//div').each do |div|
     if div['class'] == 'TrainingProperty clrfix'
       # puts "INFO: Handle trainingProperty %s" % div
       div_dict = {}
-      div.xpath('//div').each do |part|
+      div.xpath('./div').each do |part|
         part_key = part['class']
         if part_key == 'Key'
           div_dict[part_key] = part.text
@@ -49,12 +112,25 @@ def import_fb_training(person_id, path)
         end
       end
       key = div_dict['Key']
-      if TRANSLATE_TP.key?(key)
-        if key == "Runda:"
-          href = div_dict['Value'].children[0]['href']
-          route_id = href.split('%3D')[-1]
-        else
-          training[TRANSLATE_TP[key]] = div_dict['Value'].text
+
+      int_map = {'Tempo:' => nil,
+                 'Hastighet:' => nil,
+                 'Intensitet:' => 'intensity'}
+      pulse_map = {'Maxpuls:' => 'max_pulse_bpm',
+                   'Snittpuls:' => 'avg_pulse_bpm'}
+
+      if key == "Runda:"
+        href = div_dict['Value'].children[0]['href']
+        route_id = href.split('%3D')[-1]
+      elsif key == "Sträcka:"
+        training['distance_m'] = str2meters(div_dict['Value'].text)
+      elsif key == "Kaloriförbrukning:"
+        training['energy_kcal'] = str2kcal(div_dict['Value'].text)
+      elsif pulse_map.key? key
+        training[pulse_map[key]] = str2bpm(div_dict['Value'].text)
+      elsif int_map.key? key
+        if not int_map[key].nil?
+          training[int_map[key]] = div_dict['Value'].text.to_i
         end
       else
         puts "ERROR: Can't map training property %s" % div_dict['Key']
@@ -64,11 +140,51 @@ def import_fb_training(person_id, path)
     end
   end
 
+  tables = doc.xpath('//table')
+  intervals = []
+  tables.each do |table|
+    # print(table)
+    if table['id'] == "ctl00_ctl00_MainContentPlaceHolder_MainContentPlaceHolder_TrainingPropertiesDataList"
+      # This should already be handled
+      # table.xpath('./tr').each do |tr|
+      #   # print('\t'.join([''.join(th.contents.strip(' \t\n\r')) for th in tr.find_all('th')]))
+      #   td_list = tr.xpath('./td').map{|td| td.children}
+      #   # print(td_list)
+      #   # for td in td_list:
+      #   # print(td)
+      # end
+    else
+      puts "INFO: Handling table with id=%s class=%s" % [table['id'], table['class']]
+      if table.xpath('.//div[@id="chartWrapper"]').size == 0
+        table.xpath('./tr').each do |tr|
+          tds = tr.xpath('./td').map{|td| td.text.strip}
+          if tds.size > 0
+            intervals.append({'duration_s': str2seconds(tds[0]),
+                              'distance_m': str2meters(tds[1]),
+                              # 'pace': tds[2],
+                              # 'speed': tds[3],
+                              'comment': tds[4]})
+            # print('\t'.join([contents_to_text(th).strip() for th in tr.find_all('th')]))
+            # print('\t'.join([contents_to_text(td).strip() for td in tr.find_all('td')]))
+          end
+        end
+      else
+        puts "INFO: Can't handle chart!"
+      end
+    end
+    # print()
+  end
+
   puts
   puts "Training:"
   pp training
   if not route_id.nil?
+    puts "FIXME: Implement routes!"
     puts "Route: %d" % route_id
+  end
+  if intervals.size > 0
+    puts "Intervals:"
+    pp intervals
   end
   puts
 end
