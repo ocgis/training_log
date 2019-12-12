@@ -1,0 +1,72 @@
+<%= form_for(training) do |f| %>
+  <% if training.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(training.errors.count, "error") %> prohibited this training from being saved:</h2>
+
+      <ul>
+      <% training.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :kind %>
+    <%= f.text_field :kind %>
+  </div>
+
+  <div class="field">
+    <%= f.label :date %>
+    <%= f.datetime_select :date %>
+  </div>
+
+  <div class="field">
+    <%= f.label :description %>
+    <%= f.text_area :description %>
+  </div>
+
+  <div class="field">
+    <%= f.label :duration_s %>
+    <%= f.number_field :duration_s %>
+  </div>
+
+  <div class="field">
+    <%= f.label :distance_m %>
+    <%= f.number_field :distance_m %>
+  </div>
+
+  <div class="field">
+    <%= f.label :max_pulse_bpm %>
+    <%= f.number_field :max_pulse_bpm %>
+  </div>
+
+  <div class="field">
+    <%= f.label :avg_pulse_bpm %>
+    <%= f.number_field :avg_pulse_bpm %>
+  </div>
+
+  <div class="field">
+    <%= f.label :energy_kcal %>
+    <%= f.number_field :energy_kcal %>
+  </div>
+
+  <div class="field">
+    <%= f.label :intensity %>
+    <%= f.number_field :intensity %>
+  </div>
+
+  <div class="field">
+    <%= f.label :altid %>
+    <%= f.number_field :altid %>
+  </div>
+
+  <div class="field">
+    <%= f.label :person_id %>
+    <%= f.text_field :person_id %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

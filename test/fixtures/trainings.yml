@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  kind: MyString
+  date: 2019-12-11 15:44:13
+  description: MyText
+  duration_s: 1
+  distance_m: 1
+  max_pulse_bpm: 1
+  avg_pulse_bpm: 1
+  energy_kcal: 1
+  intensity: 1
+  altid: 1
+  person: one
+
+two:
+  kind: MyString
+  date: 2019-12-11 15:44:13
+  description: MyText
+  duration_s: 1
+  distance_m: 1
+  max_pulse_bpm: 1
+  avg_pulse_bpm: 1
+  energy_kcal: 1
+  intensity: 1
+  altid: 1
+  person: two

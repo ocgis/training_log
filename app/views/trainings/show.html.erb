@@ -1,0 +1,59 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Kind:</strong>
+  <%= @training.kind %>
+</p>
+
+<p>
+  <strong>Date:</strong>
+  <%= @training.date %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @training.description %>
+</p>
+
+<p>
+  <strong>Duration s:</strong>
+  <%= @training.duration_s %>
+</p>
+
+<p>
+  <strong>Distance m:</strong>
+  <%= @training.distance_m %>
+</p>
+
+<p>
+  <strong>Max pulse bpm:</strong>
+  <%= @training.max_pulse_bpm %>
+</p>
+
+<p>
+  <strong>Avg pulse bpm:</strong>
+  <%= @training.avg_pulse_bpm %>
+</p>
+
+<p>
+  <strong>Energy kcal:</strong>
+  <%= @training.energy_kcal %>
+</p>
+
+<p>
+  <strong>Intensity:</strong>
+  <%= @training.intensity %>
+</p>
+
+<p>
+  <strong>Altid:</strong>
+  <%= @training.altid %>
+</p>
+
+<p>
+  <strong>Person:</strong>
+  <%= @training.person %>
+</p>
+
+<%= link_to 'Edit', edit_training_path(@training) %> |
+<%= link_to 'Back', trainings_path %>
