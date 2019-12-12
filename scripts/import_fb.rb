@@ -67,9 +67,26 @@ def str2bpm(str)
 end
 
 
-def import_fb_training(person_id, path)
+def get_person_id(doc)
+  avatar_tag = doc.xpath('//img[@id="ctl00_ctl00_MainContentPlaceHolder_PersonNavigation1_PhotoImage"]')
+  if avatar_tag.size != 1
+    raise "Could not get person id"
+  end
+  user_match = /\/(\d+)\./.match(avatar_tag[0]['src'])
+  return user_match[1].to_i
+end
+
+
+def import_fb_training(person_hash, path)
   puts "About to parse training from " + path
   doc = Nokogiri::HTML(open(path))
+
+  training_person_id = get_person_id(doc)
+
+  if not person_hash.key? training_person_id
+    raise "Training is for person %d, not person %d" % [training_person_id, person_id]
+  end
+  person_obj = person_hash[training_person_id]
 
   training = {}
   route_id = nil
@@ -90,7 +107,7 @@ def import_fb_training(person_id, path)
     end
   end
   # puts meta_dict
-  training['altid'] = meta_dict['og:url'].split('=')[-1]
+  training['altid'] = meta_dict['og:url'].split('=')[-1].to_i
   training['kind'] = meta_dict['og:title'].split(' ')[0]
   training['date'] = meta_dict['og:title'].split(' ')[1]
   training['description'] = meta_dict['og:description']
@@ -178,6 +195,20 @@ def import_fb_training(person_id, path)
   puts
   puts "Training:"
   pp training
+  training_objs = Training.where({altid: training['altid']})
+  if training_objs.length == 1
+    training_obj = training_objs[0]
+    training_obj.update(training)
+    training_obj.save
+    puts "Updated training %d with %s" % [training_obj.id, training]
+  elsif training_objs.length == 0
+    training_obj = Training.new(training)
+    person_obj.trainings << training_obj
+    puts "Created training %d with %s" % [training_obj.id, training]
+  else
+    raise "Found several trainings with id"
+  end
+
   if not route_id.nil?
     puts "FIXME: Implement routes!"
     puts "Route: %d" % route_id
@@ -200,12 +231,8 @@ def import_fb_user(path)
   end
   person_name = main_content[0].content
 
-  avatar_tag = doc.xpath('//img[@id="ctl00_ctl00_MainContentPlaceHolder_PersonNavigation1_PhotoImage"]')
-  if avatar_tag.size != 1
-    raise "Could not get person id"
-  end
-  user_match = /\/(\d+)\./.match(avatar_tag[0]['src'])
-  person_id = user_match[1].to_i
+  person_id = get_person_id(doc)
+
   person_objs = Person.where({altid: person_id})
   if person_objs.length == 1
     person_obj = person_objs[0]
@@ -221,10 +248,12 @@ def import_fb_user(path)
     raise "Found several persons with id"
   end
 
+  person_hash = { person_id => person_obj }
+
   # Now import trainings
   trainings_path = path.split('/')[0..-3].join('/') + '/training/show.aspx?TrainingID=*'
   Dir[trainings_path].each do |training_path|
-    import_fb_training(person_id, training_path)
+    import_fb_training(person_hash, training_path)
     # return # FIXME
   end
 end
