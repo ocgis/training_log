@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  duration_s: 1
+  distance_m: 1
+  comment: MyText
+  ix: 1
+  training: one
+
+two:
+  duration_s: 1
+  distance_m: 1
+  comment: MyText
+  ix: 1
+  training: two

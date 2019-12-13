@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :intervals
   resources :trainings
   resources :people
   get 'people/index'

@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Duration s:</strong>
+  <%= @interval.duration_s %>
+</p>
+
+<p>
+  <strong>Distance m:</strong>
+  <%= @interval.distance_m %>
+</p>
+
+<p>
+  <strong>Comment:</strong>
+  <%= @interval.comment %>
+</p>
+
+<p>
+  <strong>Ix:</strong>
+  <%= @interval.ix %>
+</p>
+
+<p>
+  <strong>Training:</strong>
+  <%= @interval.training %>
+</p>
+
+<%= link_to 'Edit', edit_interval_path(@interval) %> |
+<%= link_to 'Back', intervals_path %>

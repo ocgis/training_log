@@ -10,7 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191211144413) do
+ActiveRecord::Schema.define(version: 20191213184411) do
+
+  create_table "intervals", force: :cascade do |t|
+    t.integer  "duration_s"
+    t.integer  "distance_m"
+    t.text     "comment"
+    t.integer  "ix"
+    t.integer  "training_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["training_id"], name: "index_intervals_on_training_id"
+  end
 
   create_table "people", force: :cascade do |t|
     t.string   "name"
