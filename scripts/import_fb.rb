@@ -159,6 +159,7 @@ def import_fb_training(person_hash, path)
 
   tables = doc.xpath('//table')
   intervals = []
+  ix = 0
   tables.each do |table|
     # print(table)
     if table['id'] == "ctl00_ctl00_MainContentPlaceHolder_MainContentPlaceHolder_TrainingPropertiesDataList"
@@ -176,11 +177,13 @@ def import_fb_training(person_hash, path)
         table.xpath('./tr').each do |tr|
           tds = tr.xpath('./td').map{|td| td.text.strip}
           if tds.size > 0
-            intervals.append({'duration_s': str2seconds(tds[0]),
+            intervals.append({'ix': ix,
+                              'duration_s': str2seconds(tds[0]),
                               'distance_m': str2meters(tds[1]),
                               # 'pace': tds[2],
                               # 'speed': tds[3],
                               'comment': tds[4]})
+            ix = ix + 1
             # print('\t'.join([contents_to_text(th).strip() for th in tr.find_all('th')]))
             # print('\t'.join([contents_to_text(td).strip() for td in tr.find_all('td')]))
           end
@@ -213,9 +216,22 @@ def import_fb_training(person_hash, path)
     puts "FIXME: Implement routes!"
     puts "Route: %d" % route_id
   end
-  if intervals.size > 0
-    puts "Intervals:"
-    pp intervals
+
+  training_obj.intervals.order(:ix).each do |interval_obj|
+    if intervals.size > 0
+      interval = intervals.delete_at(0)
+      interval_obj.update(interval)
+      interval_obj.save
+      puts "Updated intervaĺ %d with %s" % [interval_obj.id, interval]
+    else
+      puts "Removed intervaĺ %d" % interval_obj.id
+      interval_obj.destroy
+    end
+  end
+  intervals.each do |interval|
+    interval_obj = Interval.new(interval)
+    training_obj.intervals << interval_obj
+    puts "Created intervaĺ %d with %s" % [interval_obj.id, interval]
   end
   puts
 end
