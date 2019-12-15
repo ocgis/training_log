@@ -77,6 +77,75 @@ def get_person_id(doc)
 end
 
 
+def import_fb_route(person_hash, path)
+  puts "About to parse route from " + path
+  doc = Nokogiri::HTML(open(path))
+
+  route_data_tag = doc.xpath('//input[@id="RouteDataHiddenField"]')
+  if route_data_tag.size != 1
+    raise "Could not get route data"
+  end
+  route_values = route_data_tag[0]['value']
+  if route_values.nil?
+    puts 'ERROR: No route data found for %s' % path
+    return
+  end
+  route_data = JSON.parse(route_values)
+
+  direct_map = { 'Distance' => 'distance_km',
+                 'RouteID' => 'altid',
+                 'RouteName' => 'name'}
+
+  expected_values = { 'CanAddToMyRoutes' => false,
+                      'Comment' => '',
+                      'CreatedByFirstname' => '-',
+                      'CreatedByLastname' => '-',
+                      'IsChanged' => false,
+                      'IsLoggedIn' => false,
+                      'IsOnMyList' => false,
+                      'IsOwner' => false,
+                      'Keywords' => '',
+                      'MyRouteName' => '',
+                      'OriginallyFromPostingID' => 0,
+                      'Privacy' => 'everyone',
+                      'Status' => 0,
+                      'ZoomLevel' => 0 }
+
+  ignored_keys = ['MapType']
+
+  route = {}
+  route_person_altid = nil
+  route_points = []
+  route_data.each do |k, v|
+    if direct_map.key? k
+      route[direct_map[k]] = v
+    elsif expected_values.key? k
+      if v != expected_values[k]
+        raise 'Key %s rendered value "%s" (expected "%s")' % [k, v, expected_values[k]]
+      end
+    elsif k == 'Points'
+      ix = 0
+      v.each do |point|
+        route_points.append({ ix: ix,
+                              latitude: point['Lat'],
+                              longitude: point['Lng']})
+        ix = ix + 1
+      end
+    elsif k == 'CreatedByID'
+      route_person_altid = v
+    elsif ignored_keys.include? k
+      # Ignore key
+    else
+      raise 'Key %s with value "%s" needs to be handled' % [k, v]
+    end
+  end
+
+  pp route_person_altid
+  pp route
+  pp route_points
+end
+
+
 def import_fb_training(person_hash, path)
   puts "About to parse training from " + path
   doc = Nokogiri::HTML(open(path))
@@ -108,8 +177,12 @@ def import_fb_training(person_hash, path)
   end
   # puts meta_dict
   training['altid'] = meta_dict['og:url'].split('=')[-1].to_i
-  training['kind'] = meta_dict['og:title'].split(' ')[0]
-  training['date'] = meta_dict['og:title'].split(' ')[1]
+  kind_date_match = /^(.*) (\d\d\d\d-\d\d-\d\d) - .*$/.match(meta_dict['og:title'])
+  if not kind_date_match
+    raise 'Could not parse title: "%s"' % meta_dict['og:title']
+  end
+  training['kind'] = kind_date_match[1]
+  training['date'] = kind_date_match[2]
   training['description'] = meta_dict['og:description']
 
   sub_header = doc.xpath('//h2[@id="ctl00_ctl00_MainContentPlaceHolder_MainContentPlaceHolder_SubHeader"]')
@@ -265,6 +338,12 @@ def import_fb_user(path)
   end
 
   person_hash = { person_id => person_obj }
+
+  # Now import routes
+  routes_path = path.split('/')[0..-3].join('/') + '/tracks/index.aspx?RouteID=*'
+  Dir[routes_path].each do |route_path|
+    import_fb_route(person_hash, route_path)
+  end
 
   # Now import trainings
   trainings_path = path.split('/')[0..-3].join('/') + '/training/show.aspx?TrainingID=*'
