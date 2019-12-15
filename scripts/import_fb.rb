@@ -140,9 +140,56 @@ def import_fb_route(person_hash, path)
     end
   end
 
-  pp route_person_altid
+  if person_hash.key? route_person_altid
+    person_obj = person_hash[route_person_altid]
+  else
+    person_objs = Person.where({altid: route_person_altid})
+    if person_objs.size == 1
+      person_obj = person_objs[0]
+    elsif person_objs.size == 0
+      person_obj = Person.new({name: 'Unknown',
+                               altid: route_person_altid})
+      person_obj.save
+      puts 'INFO: Created person with altid %d as owner of route' % route_person_altid
+    else
+      raise 'Found several persons with altid %d' % route_person_altid
+    end
+  end
+
+  puts
+  puts "Route:"
   pp route
-  pp route_points
+  route_objs = Route.where({altid: route['altid']})
+  if route_objs.length == 1
+    route_obj = route_objs[0]
+    route_obj.update(route)
+    route_obj.save
+    puts "Updated route %d with %s" % [route_obj.id, route]
+  elsif route_objs.length == 0
+    route_obj = Route.new(route)
+    person_obj.routes << route_obj
+    puts "Created route %d with %s" % [route_obj.id, route]
+  else
+    raise "Found several trainings with id"
+  end
+
+  route_obj.route_points.order(:ix).each do |route_point_obj|
+    if route_points.size > 0
+      route_point = route_points.delete_at(0)
+      route_point_obj.update(route_point)
+      route_point_obj.save
+      puts "Updated route point %d with %s" % [route_point_obj.id, route_point]
+    else
+      puts "Removed route point %d" % route_point_obj.id
+      route_point_obj.destroy
+    end
+  end
+  route_points.each do |route_point|
+    route_point_obj = RoutePoint.new(route_point)
+    route_obj.route_points << route_point_obj
+    puts "Created route point %d with %s" % [route_point_obj.id, route_point]
+  end
+  puts
 end
 
 

@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Distance km:</strong>
+  <%= @route.distance_km %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @route.name %>
+</p>
+
+<p>
+  <strong>Altid:</strong>
+  <%= @route.altid %>
+</p>
+
+<p>
+  <strong>Person:</strong>
+  <%= @route.person %>
+</p>
+
+<%= link_to 'Edit', edit_route_path(@route) %> |
+<%= link_to 'Back', routes_path %>

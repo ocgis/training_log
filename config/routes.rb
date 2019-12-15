@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :route_points
+  resources :routes
   resources :intervals
   resources :trainings
   resources :people

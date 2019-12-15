@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  distance_km: 1.5
+  name: MyString
+  altid: 1
+  person: one
+
+two:
+  distance_km: 1.5
+  name: MyString
+  altid: 1
+  person: two

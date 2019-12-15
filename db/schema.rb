@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191213184411) do
+ActiveRecord::Schema.define(version: 20191215174345) do
 
   create_table "intervals", force: :cascade do |t|
     t.integer  "duration_s"
@@ -28,6 +28,26 @@ ActiveRecord::Schema.define(version: 20191213184411) do
     t.integer  "altid"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "route_points", force: :cascade do |t|
+    t.float    "latitude"
+    t.float    "longitude"
+    t.integer  "ix"
+    t.integer  "route_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["route_id"], name: "index_route_points_on_route_id"
+  end
+
+  create_table "routes", force: :cascade do |t|
+    t.float    "distance_km"
+    t.string   "name"
+    t.integer  "altid"
+    t.integer  "person_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["person_id"], name: "index_routes_on_person_id"
   end
 
   create_table "trainings", force: :cascade do |t|
