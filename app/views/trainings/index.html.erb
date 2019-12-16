@@ -2,48 +2,22 @@
 
 <h1>Trainings</h1>
 
-<table>
-  <thead>
-    <tr>
-      <th>Kind</th>
-      <th>Date</th>
-      <th>Description</th>
-      <th>Duration s</th>
-      <th>Distance m</th>
-      <th>Max pulse bpm</th>
-      <th>Avg pulse bpm</th>
-      <th>Energy kcal</th>
-      <th>Intensity</th>
-      <th>Altid</th>
-      <th>Route</th>
-      <th>Person</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+<% @trainings.each do |training| %>
+<p>
+  <%= link_to "%s %s" % [training.date_yyyy_mm_dd, training.kind], training %>
+  <%= training.duration_hh_mm_ss %>
+  <%= training.distance_km %>
 
-  <tbody>
-    <% @trainings.each do |training| %>
-      <tr>
-        <td><%= training.kind %></td>
-        <td><%= training.date %></td>
-        <td><%= training.description %></td>
-        <td><%= training.duration_s %></td>
-        <td><%= training.distance_m %></td>
-        <td><%= training.max_pulse_bpm %></td>
-        <td><%= training.avg_pulse_bpm %></td>
-        <td><%= training.energy_kcal %></td>
-        <td><%= training.intensity %></td>
-        <td><%= training.altid %></td>
-        <td><%= training.route_id %></td>
-        <td><%= training.person %></td>
-        <td><%= link_to 'Show', training %></td>
-        <td><%= link_to 'Edit', edit_training_path(training) %></td>
-        <td><%= link_to 'Destroy', training, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+  <% if not training.description.nil? %>
+  <br />
+  <%= training.description %>
+  <% end %>
 
-<br>
+  <% if not training.route_id.nil? %>
+  <br />
+  <%= link_to training.route.name, training.route %>
+  <% end %>
+</p>
+<% end %>
 
 <%= link_to 'New Training', new_training_path %>
