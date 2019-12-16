@@ -12,7 +12,7 @@ def str2seconds(str)
 
   hh_mm_ss_match = /^(\d\d):(\d\d):(\d\d)$/.match(str)
   if hh_mm_ss_match
-    return (hh_mm_ss_match[1].to_i * 24 + hh_mm_ss_match[2].to_i) * 60 + hh_mm_ss_match[3].to_i
+    return (hh_mm_ss_match[1].to_i * 60 + hh_mm_ss_match[2].to_i) * 60 + hh_mm_ss_match[3].to_i
   end
 
   raise 'Could not convert "%s" to seconds' % str
