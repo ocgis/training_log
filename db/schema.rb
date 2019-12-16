@@ -62,9 +62,11 @@ ActiveRecord::Schema.define(version: 20191215174345) do
     t.integer  "intensity"
     t.integer  "altid"
     t.integer  "person_id"
+    t.integer  "route_id"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
     t.index ["person_id"], name: "index_trainings_on_person_id"
+    t.index ["route_id"], name: "index_trainings_on_route_id"
   end
 
 end

@@ -17,7 +17,7 @@ class TrainingsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create training" do
     assert_difference('Training.count') do
-      post trainings_url, params: { training: { altid: @training.altid, avg_pulse_bpm: @training.avg_pulse_bpm, date: @training.date, description: @training.description, distance_m: @training.distance_m, duration_s: @training.duration_s, energy_kcal: @training.energy_kcal, intensity: @training.intensity, kind: @training.kind, max_pulse_bpm: @training.max_pulse_bpm, person_id: @training.person_id } }
+      post trainings_url, params: { training: { altid: @training.altid, avg_pulse_bpm: @training.avg_pulse_bpm, date: @training.date, description: @training.description, distance_m: @training.distance_m, duration_s: @training.duration_s, energy_kcal: @training.energy_kcal, intensity: @training.intensity, kind: @training.kind, max_pulse_bpm: @training.max_pulse_bpm, person_id: @training.person_id, route_id: @training.route_id } }
     end
 
     assert_redirected_to training_url(Training.last)
@@ -34,7 +34,7 @@ class TrainingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update training" do
-    patch training_url(@training), params: { training: { altid: @training.altid, avg_pulse_bpm: @training.avg_pulse_bpm, date: @training.date, description: @training.description, distance_m: @training.distance_m, duration_s: @training.duration_s, energy_kcal: @training.energy_kcal, intensity: @training.intensity, kind: @training.kind, max_pulse_bpm: @training.max_pulse_bpm, person_id: @training.person_id } }
+    patch training_url(@training), params: { training: { altid: @training.altid, avg_pulse_bpm: @training.avg_pulse_bpm, date: @training.date, description: @training.description, distance_m: @training.distance_m, duration_s: @training.duration_s, energy_kcal: @training.energy_kcal, intensity: @training.intensity, kind: @training.kind, max_pulse_bpm: @training.max_pulse_bpm, person_id: @training.person_id, route_id: @training.route_id } }
     assert_redirected_to training_url(@training)
   end
 

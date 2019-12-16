@@ -11,9 +11,11 @@ class CreateTrainings < ActiveRecord::Migration[5.0]
       t.integer :energy_kcal
       t.integer :intensity
       t.integer :altid
+      t.integer :route_id
       t.references :person, foreign_key: true
 
       t.timestamps
     end
+    add_index :trainings, :route_id
   end
 end

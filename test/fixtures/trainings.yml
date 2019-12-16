@@ -2,7 +2,7 @@
 
 one:
   kind: MyString
-  date: 2019-12-11 15:44:13
+  date: 2019-12-16 19:20:10
   description: MyText
   duration_s: 1
   distance_m: 1
@@ -11,11 +11,12 @@ one:
   energy_kcal: 1
   intensity: 1
   altid: 1
+  route_id: 1
   person: one
 
 two:
   kind: MyString
-  date: 2019-12-11 15:44:13
+  date: 2019-12-16 19:20:10
   description: MyText
   duration_s: 1
   distance_m: 1
@@ -24,4 +25,5 @@ two:
   energy_kcal: 1
   intensity: 1
   altid: 1
+  route_id: 1
   person: two

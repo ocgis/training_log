@@ -333,8 +333,17 @@ def import_fb_training(person_hash, path)
   end
 
   if not route_id.nil?
-    puts "FIXME: Implement routes!"
     puts "Route: %d" % route_id
+    route_objs = Route.where({altid: route_id})
+    if route_objs.length == 1
+      training_obj.route_id = route_objs[0].id
+      training_obj.save
+      puts "Updated training %d with route %s" % [training_obj.id, route_id]
+    elsif route_objs.length == 0
+      puts "Could not find route %d" % route_id
+    else
+      raise "Found several routes with id %d" % route_id
+    end
   end
 
   training_obj.intervals.order(:ix).each do |interval_obj|
@@ -396,7 +405,6 @@ def import_fb_user(path)
   trainings_path = path.split('/')[0..-3].join('/') + '/training/show.aspx?TrainingID=*'
   Dir[trainings_path].each do |training_path|
     import_fb_training(person_hash, training_path)
-    # return # FIXME
   end
 end
 
