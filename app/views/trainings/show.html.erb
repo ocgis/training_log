@@ -1,63 +1,66 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Kind:</strong>
+  <%= @training.date_yyyy_mm_dd %>
   <%= @training.kind %>
-</p>
+  <%= @training.duration_hh_mm_ss %>
+  <%= @training.distance_km %>
 
-<p>
-  <strong>Date:</strong>
-  <%= @training.date %>
-</p>
-
-<p>
-  <strong>Description:</strong>
+  <% if not @training.description.nil? %>
+  <br />
   <%= @training.description %>
-</p>
+  <% end %>
 
-<p>
-  <strong>Duration s:</strong>
-  <%= @training.duration_s %>
-</p>
+  <% if not @training.route_id.nil? %>
+  <br />
+  <%= link_to @training.route.name, @training.route %>
+  <% end %>
 
-<p>
-  <strong>Distance m:</strong>
-  <%= @training.distance_m %>
-</p>
+  <% if not @training.max_pulse_bpm.nil? %>
+  <br />
+  Maxpuls: <%= @training.max_pulse_bpm %> slag/min
+  <% end %>
 
-<p>
-  <strong>Max pulse bpm:</strong>
-  <%= @training.max_pulse_bpm %>
-</p>
+  <% if not @training.avg_pulse_bpm.nil? %>
+  <br />
+  Medelpuls: <%= @training.avg_pulse_bpm %> slag/min
+  <% end %>
 
-<p>
-  <strong>Avg pulse bpm:</strong>
-  <%= @training.avg_pulse_bpm %>
-</p>
+  <% if not @training.energy_kcal.nil? %>
+  <br />
+  Energiförbrukning: <%= @training.energy_kcal %> kcal
+  <% end %>
 
-<p>
-  <strong>Energy kcal:</strong>
-  <%= @training.energy_kcal %>
-</p>
+  <% if not @training.intensity.nil? %>
+  <br />
+  Intensitet: <%= @training.intensity %>
+  <% end %>
 
-<p>
-  <strong>Intensity:</strong>
-  <%= @training.intensity %>
+  <% if @training.intervals.size > 0 %>
+  <br />
 </p>
-
 <p>
-  <strong>Altid:</strong>
-  <%= @training.altid %>
-</p>
-
-<p>
-  <strong>Route:</strong>
-  <%= @training.route_id %>
-</p>
-
-<p>
-  <strong>Person:</strong>
-  <%= @training.person %>
+  Intervaller
+  <br />
+  <table>
+    <tr>
+      <th>Tid</th>
+      <th>Sträcka</th>
+      <th>Tempo</th>
+      <th>Hastighet</th>
+      <th>Kommentar</th>
+    </tr>
+    <% @training.intervals.order(:ix).each do |interval| %>
+    <tr>
+      <th><%= interval.duration_hh_mm_ss %></th>
+      <th><%= interval.distance_km %></th>
+      <th><%= interval.pace_min_km %></th>
+      <th><%= interval.speed_km_h %></th>
+      <th><%= interval.comment %></th>
+    </tr>
+    <% end %>
+  </table>
+  <% end %>
 </p>
 
 <%= link_to 'Edit', edit_training_path(@training) %> |
