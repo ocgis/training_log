@@ -10,50 +10,50 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191215174345) do
+ActiveRecord::Schema.define(version: 20191228161419) do
 
-  create_table "intervals", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "intervals", force: :cascade do |t|
     t.integer  "duration_s"
     t.integer  "distance_m"
-    t.text     "comment",     limit: 65535
+    t.text     "comment"
     t.integer  "ix"
     t.integer  "training_id"
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
-    t.index ["training_id"], name: "index_intervals_on_training_id", using: :btree
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["training_id"], name: "index_intervals_on_training_id"
   end
 
-  create_table "people", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "people", force: :cascade do |t|
     t.string   "name"
     t.integer  "altid"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "route_points", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
-    t.float    "latitude",   limit: 24
-    t.float    "longitude",  limit: 24
+  create_table "route_points", force: :cascade do |t|
+    t.float    "latitude"
+    t.float    "longitude"
     t.integer  "ix"
     t.integer  "route_id"
-    t.datetime "created_at",            null: false
-    t.datetime "updated_at",            null: false
-    t.index ["route_id"], name: "index_route_points_on_route_id", using: :btree
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["route_id"], name: "index_route_points_on_route_id"
   end
 
-  create_table "routes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
-    t.float    "distance_km", limit: 24
+  create_table "routes", force: :cascade do |t|
+    t.float    "distance_km"
     t.string   "name"
     t.integer  "altid"
     t.integer  "person_id"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
-    t.index ["person_id"], name: "index_routes_on_person_id", using: :btree
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["person_id"], name: "index_routes_on_person_id"
   end
 
-  create_table "trainings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "trainings", force: :cascade do |t|
     t.string   "kind"
     t.datetime "date"
-    t.text     "description",   limit: 65535
+    t.text     "description"
     t.integer  "duration_s"
     t.integer  "distance_m"
     t.integer  "max_pulse_bpm"
@@ -61,16 +61,24 @@ ActiveRecord::Schema.define(version: 20191215174345) do
     t.integer  "energy_kcal"
     t.integer  "intensity"
     t.integer  "altid"
-    t.integer  "route_id"
     t.integer  "person_id"
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
-    t.index ["person_id"], name: "index_trainings_on_person_id", using: :btree
-    t.index ["route_id"], name: "index_trainings_on_route_id", using: :btree
+    t.integer  "route_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.index ["person_id"], name: "index_trainings_on_person_id"
+    t.index ["route_id"], name: "index_trainings_on_route_id"
   end
 
-  add_foreign_key "intervals", "trainings"
-  add_foreign_key "route_points", "routes"
-  add_foreign_key "routes", "people"
-  add_foreign_key "trainings", "people"
+  create_table "users", force: :cascade do |t|
+    t.string   "email",                  default: "", null: false
+    t.string   "encrypted_password",     default: "", null: false
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
 end

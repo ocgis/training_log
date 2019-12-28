@@ -54,3 +54,7 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 # Export db data
 gem 'yaml_db'
+
+# Authentication
+gem 'devise'
+gem 'omniauth-facebook'
