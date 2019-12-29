@@ -1,4 +1,7 @@
 class RoutesController < ApplicationController
+
+  load_and_authorize_resource
+
   before_action :set_route, only: [:show, :edit, :update, :destroy]
 
   # GET /routes

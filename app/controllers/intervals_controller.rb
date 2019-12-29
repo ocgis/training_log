@@ -1,4 +1,7 @@
 class IntervalsController < ApplicationController
+
+  load_and_authorize_resource
+
   before_action :set_interval, only: [:show, :edit, :update, :destroy]
 
   # GET /intervals

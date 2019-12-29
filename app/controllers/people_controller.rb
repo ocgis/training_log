@@ -1,4 +1,7 @@
 class PeopleController < ApplicationController
+
+  load_and_authorize_resource
+
   before_action :set_person, only: [:show, :edit, :update, :destroy]
 
   # GET /people

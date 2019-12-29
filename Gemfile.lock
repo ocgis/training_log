@@ -53,6 +53,7 @@ GEM
     bindex (0.8.1)
     builder (3.2.4)
     byebug (11.0.1)
+    cancancan (3.0.1)
     capistrano (3.11.2)
       airbrussh (>= 1.0.0)
       i18n
@@ -166,6 +167,7 @@ GEM
     responders (3.0.0)
       actionpack (>= 5.0)
       railties (>= 5.0)
+    role_model (0.8.2)
     sass (3.7.4)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
@@ -221,6 +223,7 @@ PLATFORMS
 
 DEPENDENCIES
   byebug
+  cancancan
   capistrano-rails
   capistrano-rbenv!
   coffee-rails (~> 4.2)
@@ -232,6 +235,7 @@ DEPENDENCIES
   omniauth-facebook
   puma (~> 3.0)
   rails (~> 5.0.0)
+  role_model
   sass-rails (~> 5.0)
   spring
   spring-watcher-listen (~> 2.0.0)

@@ -58,3 +58,7 @@ gem 'yaml_db'
 # Authentication
 gem 'devise'
 gem 'omniauth-facebook'
+
+# Used for permissions
+gem 'cancancan'
+gem 'role_model'

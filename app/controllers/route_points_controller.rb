@@ -1,4 +1,7 @@
 class RoutePointsController < ApplicationController
+
+  load_and_authorize_resource
+
   before_action :set_route_point, only: [:show, :edit, :update, :destroy]
 
   # GET /route_points
