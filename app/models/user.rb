@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  has_many :people, dependent: :destroy
+
   include RoleModel
 
   roles :admin
