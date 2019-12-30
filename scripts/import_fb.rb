@@ -200,7 +200,8 @@ def import_fb_training(person_hash, path)
   training_person_id = get_person_id(doc)
 
   if not person_hash.key? training_person_id
-    raise "Training is for person %d, not person %d" % [training_person_id, person_id]
+    puts "ERROR: IGNORED: Training is for person %d, not person(s) %s" % [training_person_id, person_hash.inspect]
+    return
   end
   person_obj = person_hash[training_person_id]
 
