@@ -318,6 +318,7 @@ def import_fb_training(person_hash, path)
 
   puts
   puts "Training:"
+  training['description'].gsub! '😁', ':D'
   pp training
   training_objs = Training.where({altid: training['altid']})
   if training_objs.length == 1
@@ -388,6 +389,7 @@ def import_fb_user(path)
   elsif person_objs.length == 0
     person_obj = Person.new({name: person_name,
                              altid: person_id})
+    person_obj.user = User.find(1)
     person_obj.save
     puts "Created person %d with name %s and alt id %s" % [person_obj.id, person_name, person_id]
   else
