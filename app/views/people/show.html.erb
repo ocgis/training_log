@@ -1,14 +1,16 @@
+<% content_for :title, @person.name %>
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Name:</strong>
-  <%= @person.name %>
-</p>
+<h1><%= @person.name %></h1>
 
+<h2>Trainings</h2>
+
+
+<% @person.trainings.order(date: :desc).each do |training| %>
 <p>
-  <strong>Altid:</strong>
-  <%= @person.altid %>
+  <%= render 'trainings/list_one', training: training %>
 </p>
+<% end %>
 
 <%= link_to 'Edit', edit_person_path(@person) %> |
 <%= link_to 'Back', people_path %>
