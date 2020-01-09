@@ -10,6 +10,8 @@
 
   <body>
     <ul class="hmenu">
+      <%= link_to "Overview", root_path %>
+      <%= link_to "New training", new_training_path %>
       <%= render 'devise/menu/registration_items' %>
       <%= render 'devise/menu/login_items' %>
     </ul>
