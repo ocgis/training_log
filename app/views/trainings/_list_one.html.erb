@@ -4,7 +4,7 @@
 
 <% if not training.description.blank? %>
 <br />
-<%= training.description %>
+<%= sanitize training.description.gsub("\n", '<BR />') %>
 <% end %>
 
 <% if not training.route_id.nil? %>
