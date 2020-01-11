@@ -1,4 +1,4 @@
-<%= form_for(training) do |f| %>
+<%= semantic_form_for(training) do |f| %>
   <% if training.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(training.errors.count, "error") %> prohibited this training from being saved:</h2>
@@ -69,6 +69,16 @@
   <div class="field">
     <%= f.label :person_id %>
     <%= f.text_field :person_id %>
+  </div>
+
+  <div id="intervals">
+    <h2>Intervals</h2>
+    <%= f.semantic_fields_for :intervals do |interval| %>
+      <%= render 'interval_fields', f: interval %>
+    <% end %>
+    <div class="links">
+      <%= link_to_add_association 'Add interval', f, :intervals %>
+    </div>
   </div>
 
   <div class="actions">

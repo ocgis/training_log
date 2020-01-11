@@ -1,6 +1,8 @@
 class Training < ApplicationRecord
   belongs_to :person
   has_many :intervals, dependent: :destroy
+  accepts_nested_attributes_for :intervals, allow_destroy: true
+  before_save :prepare_training
 
   def date_yyyy_mm_dd
     return date.strftime("%Y-%m-%d")
@@ -20,7 +22,6 @@ class Training < ApplicationRecord
 
 
   def duration_hh_mm_ss=(dhms)
-    puts "Set duration to %s" % dhms
     parts = dhms.split(':')
     if parts.size == 0
       self.duration_s = nil
@@ -50,6 +51,17 @@ class Training < ApplicationRecord
       return Route.find(route_id)
     else
       return nil
+    end
+  end
+
+  private
+
+  def prepare_training
+    # Update intervals indices to preserve order
+    ix = 1
+    self.intervals.each do |interval|
+      interval.ix = ix
+      ix = ix + 1
     end
   end
 

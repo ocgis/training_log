@@ -35,7 +35,7 @@ class Ability
 
     if user.has_role? :admin
       can [:index, :show, :edit, :update, :new, :create], Person
-      can [:show, :new, :create], Training
+      can [:show, :edit, :update, :new, :create], Training
     end
   end
 end

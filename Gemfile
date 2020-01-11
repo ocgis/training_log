@@ -62,3 +62,7 @@ gem 'omniauth-facebook'
 # Used for permissions
 gem 'cancancan'
 gem 'role_model'
+
+# Used for nested attributes
+gem 'formtastic'
+gem 'cocoon'
