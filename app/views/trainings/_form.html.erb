@@ -11,65 +11,20 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :kind %>
-    <%= f.text_field :kind %>
-  </div>
-
-  <div class="field">
-    <%= f.label :date %>
-    <%= f.datetime_select :date %>
-  </div>
-
-  <div class="field">
-    <%= f.label :description %>
-    <%= f.text_area :description %>
-  </div>
-
-  <div class="field">
-    <%= f.label :duration %>
-    <%= f.text_field :duration_hh_mm_ss %>
-  </div>
-
-  <div class="field">
-    <%= f.label :distance_m %>
-    <%= f.number_field :distance_m %>
-  </div>
-
-  <div class="field">
-    <%= f.label :max_pulse_bpm %>
-    <%= f.number_field :max_pulse_bpm %>
-  </div>
-
-  <div class="field">
-    <%= f.label :avg_pulse_bpm %>
-    <%= f.number_field :avg_pulse_bpm %>
-  </div>
-
-  <div class="field">
-    <%= f.label :energy_kcal %>
-    <%= f.number_field :energy_kcal %>
-  </div>
-
-  <div class="field">
-    <%= f.label :intensity %>
-    <%= f.number_field :intensity %>
-  </div>
-
-  <div class="field">
-    <%= f.label :altid %>
-    <%= f.number_field :altid %>
-  </div>
-
-  <div class="field">
-    <%= f.label :route_id %>
-    <%= f.number_field :route_id %>
-  </div>
-
-  <div class="field">
-    <%= f.label :person_id %>
-    <%= f.text_field :person_id %>
-  </div>
+  <%= f.inputs do %>
+  <%= f.input :kind %>
+  <%= f.input :date, as: :date_select %>
+  <%= f.input :description %>
+  <%= f.input :duration_hh_mm_ss, label: 'Duration' %>
+  <%= f.input :distance_m %>
+  <%= f.input :max_pulse_bpm %>
+  <%= f.input :avg_pulse_bpm %>
+  <%= f.input :energy_kcal %>
+  <%= f.input :intensity %>
+  <%= f.input :altid %>
+  <%= f.input :route_id %>
+  <%= f.input :person_id %>
+  <% end %>
 
   <div id="intervals">
     <h2>Intervals</h2>
