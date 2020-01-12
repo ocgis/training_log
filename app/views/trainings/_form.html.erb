@@ -16,7 +16,7 @@
   <%= f.input :date, as: :date_select %>
   <%= f.input :duration_hh_mm_ss, label: 'Duration' %>
   <%= f.input :distance_m %>
-  <%= f.input :description %>
+  <%= f.input :description, :input_html => { :rows => 1 } %>
   <%= f.input :max_pulse_bpm %>
   <%= f.input :avg_pulse_bpm %>
   <%= f.input :energy_kcal %>
