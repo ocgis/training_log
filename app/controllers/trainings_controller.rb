@@ -33,8 +33,8 @@ class TrainingsController < ApplicationController
 
     respond_to do |format|
       if @training.save
-        format.html { redirect_to @training, notice: 'Training was successfully created.' }
-        format.json { render :show, status: :created, location: @training }
+        format.html { redirect_to @training.person, notice: 'Training was successfully created.' }
+        format.json { render :show, status: :created, location: @training.person }
       else
         format.html { render :new }
         format.json { render json: @training.errors, status: :unprocessable_entity }
