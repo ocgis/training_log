@@ -3,6 +3,8 @@ class Training < ApplicationRecord
   has_many :intervals, dependent: :destroy
   accepts_nested_attributes_for :intervals, allow_destroy: true
   before_save :prepare_training
+  validates :kind, presence: true
+  validates :date, presence: true
 
   def date_yyyy_mm_dd
     return date.strftime("%Y-%m-%d")

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191230061955) do
+ActiveRecord::Schema.define(version: 20200111073037) do
 
   create_table "intervals", force: :cascade do |t|
     t.integer  "duration_s"
@@ -53,8 +53,8 @@ ActiveRecord::Schema.define(version: 20191230061955) do
   end
 
   create_table "trainings", force: :cascade do |t|
-    t.string   "kind"
-    t.datetime "date"
+    t.string   "kind",          null: false
+    t.datetime "date",          null: false
     t.text     "description"
     t.integer  "duration_s"
     t.integer  "distance_m"
