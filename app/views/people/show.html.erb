@@ -6,11 +6,14 @@
 <h2>Trainings</h2>
 
 
-<% @person.trainings.order(date: :desc).each do |training| %>
+<% @trainings.each do |training| %>
 <p>
   <%= render 'trainings/list_one', training: training %>
 </p>
 <% end %>
 
+<% if not @show_all_trainings %>
+<%= link_to 'Show all trainings', person_path(@person, allTrainings: true) %> |
+<% end %>
 <%= link_to 'Edit', edit_person_path(@person) %> |
 <%= link_to 'Back', people_path %>

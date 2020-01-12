@@ -13,6 +13,12 @@ class PeopleController < ApplicationController
   # GET /people/1
   # GET /people/1.json
   def show
+    @show_all_trainings = params.key? 'allTrainings'
+    if @show_all_trainings
+      @trainings = @person.trainings.order(date: :desc)
+    else
+      @trainings = @person.trainings.order(date: :desc).limit(20)
+    end
   end
 
   # GET /people/new
