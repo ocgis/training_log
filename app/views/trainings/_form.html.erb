@@ -14,16 +14,15 @@
   <%= f.inputs do %>
   <%= f.input :kind %>
   <%= f.input :date, as: :date_select %>
-  <%= f.input :description %>
   <%= f.input :duration_hh_mm_ss, label: 'Duration' %>
   <%= f.input :distance_m %>
+  <%= f.input :description %>
   <%= f.input :max_pulse_bpm %>
   <%= f.input :avg_pulse_bpm %>
   <%= f.input :energy_kcal %>
   <%= f.input :intensity %>
   <%= f.input :altid %>
   <%= f.input :route_id %>
-  <%= f.input :person_id %>
   <% end %>
 
   <div id="intervals">
