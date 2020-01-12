@@ -1,0 +1,10 @@
+<div class="nested-fields">
+  <%= f.inputs do %>
+    <%= f.input :duration_hh_mm_ss, label: 'Duration' %>
+    <%= f.input :distance_m %>
+    <%= f.input :comment %>
+  <% end %>
+
+  <%= link_to_remove_association "Remove interval", f %>
+</div>
+<hr />
