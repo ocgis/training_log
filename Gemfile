@@ -66,3 +66,7 @@ gem 'role_model'
 # Used for nested attributes
 gem 'formtastic'
 gem 'cocoon'
+
+# React
+gem 'webpacker'
+gem 'react-rails'
