@@ -19,10 +19,16 @@ class TrainingsController < ApplicationController
   def new
     @training = Training.new
     @training.date = DateTime.now()
+    @training_hash = @training.attributes.update({'duration_hh_mm_ss' => @training.duration_hh_mm_ss,
+
+                                                  'intervals_attributes' => @training.intervals.map { |interval| interval.attributes.except('duration_s', 'ix', 'training_id', 'created_at', 'updated_at').update({'duration_hh_mm_ss' => interval.duration_hh_mm_ss }) } })
   end
 
   # GET /trainings/1/edit
   def edit
+    @training_hash = @training.attributes.update({'duration_hh_mm_ss' => @training.duration_hh_mm_ss,
+
+                                                  'intervals_attributes' => @training.intervals.map { |interval| interval.attributes.except('duration_s', 'ix', 'training_id', 'created_at', 'updated_at').update({'duration_hh_mm_ss' => interval.duration_hh_mm_ss }) } })
   end
 
   # POST /trainings
@@ -33,7 +39,8 @@ class TrainingsController < ApplicationController
 
     respond_to do |format|
       if @training.save
-        format.html { redirect_to @training.person, notice: 'Training was successfully created.' }
+        # format.html { redirect_to @training.person, notice: 'Training was successfully created.' }
+        format.html { render :show, status: :created, location: @training.person }
         format.json { render :show, status: :created, location: @training.person }
       else
         format.html { render :new }
@@ -47,7 +54,8 @@ class TrainingsController < ApplicationController
   def update
     respond_to do |format|
       if @training.update(training_params)
-        format.html { redirect_to @training, notice: 'Training was successfully updated.' }
+        # format.html { redirect_to @training, notice: 'Training was successfully updated.' }
+        format.html { render :show, status: :ok, location: @training }
         format.json { render :show, status: :ok, location: @training }
       else
         format.html { render :edit }
