@@ -1,4 +1,7 @@
-<%= react_component("NewTrainingForm", { training: @training_hash }) %>
+<%= react_component("NewTrainingForm", {
+    id: @id,
+    training: @training_hash
+    }) %>
 
 <!--
 <%= semantic_form_for(training) do |f| %>

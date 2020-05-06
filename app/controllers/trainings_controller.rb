@@ -19,16 +19,20 @@ class TrainingsController < ApplicationController
   def new
     @training = Training.new
     @training.date = DateTime.now()
-    @training_hash = @training.attributes.update({'duration_hh_mm_ss' => @training.duration_hh_mm_ss,
+    @id = nil
+    @training_hash = @training.attributes.except('id', 'duration_s', 'created_at', 'updated_at').update({'duration_hh_mm_ss' => @training.duration_hh_mm_ss,
 
-                                                  'intervals_attributes' => @training.intervals.map { |interval| interval.attributes.except('duration_s', 'ix', 'training_id', 'created_at', 'updated_at').update({'duration_hh_mm_ss' => interval.duration_hh_mm_ss }) } })
+                                                  'intervals_attributes' => @training.intervals.map { |interval| interval.attributes.except('duration_s', 'ix', 'training_id', 'created_at', 'updated_at').update({'duration_hh_mm_ss' => interval.duration_hh_mm_ss,
+                                                                                                                                                                                                                  '_destroy' => 0 }) } })
   end
 
   # GET /trainings/1/edit
   def edit
+    @id = @training.id
     @training_hash = @training.attributes.update({'duration_hh_mm_ss' => @training.duration_hh_mm_ss,
 
-                                                  'intervals_attributes' => @training.intervals.map { |interval| interval.attributes.except('duration_s', 'ix', 'training_id', 'created_at', 'updated_at').update({'duration_hh_mm_ss' => interval.duration_hh_mm_ss }) } })
+                                                  'intervals_attributes' => @training.intervals.map { |interval| interval.attributes.except('duration_s', 'ix', 'training_id', 'created_at', 'updated_at').update({'duration_hh_mm_ss' => interval.duration_hh_mm_ss,
+                                                                                                                                                                                                                  '_destroy' => 0 }) } })
   end
 
   # POST /trainings
