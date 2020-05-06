@@ -9,32 +9,9 @@ const rules = [{ required: true }];
 const notRequired = [{ required: false }];
 
 const layout = {
-  labelCol: { span: 8 },
-  wrapperCol: { span: 16 },
+    layout: 'vertical'
 };
 
-const tailLayout = {
-  wrapperCol: { offset: 8, span: 16 },
-};
-
-
-const formItemLayout = {
-  labelCol: {
-    xs: { span: 24 },
-    sm: { span: 4 },
-  },
-  wrapperCol: {
-    xs: { span: 24 },
-    sm: { span: 20 },
-  },
-};
-
-const formItemLayoutWithOutLabel = {
-  wrapperCol: {
-    xs: { span: 24, offset: 0 },
-    sm: { span: 20, offset: 4 },
-  },
-};
 
 class NewTrainingForm extends React.Component {
     constructor(props) {
@@ -213,13 +190,13 @@ class NewTrainingForm extends React.Component {
 
                     this.setState({ training: this.state.training });
                 }}
-                style={{ width: '60%' }}
+                style={{ width: '100%' }}
                 >
                 <PlusOutlined /> Add interval
                 </Button>
                 </Form.Item>
 
-                <Form.Item {...tailLayout}>
+                <Form.Item>
                 <Button type="primary" htmlType="submit">
                 Submit
                 </Button>
