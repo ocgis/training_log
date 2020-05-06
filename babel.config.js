@@ -2,6 +2,7 @@ module.exports = function(api) {
   var validEnv = ['development', 'test', 'production']
   var currentEnv = api.env()
   var isDevelopmentEnv = api.env('development')
+  var isStagingEnv = api.env('staging')
   var isProductionEnv = api.env('production')
   var isTestEnv = api.env('test')
 
@@ -27,7 +28,7 @@ module.exports = function(api) {
         },
         '@babel/preset-react'
       ],
-      (isProductionEnv || isDevelopmentEnv) && [
+      (isProductionEnv || isStagingEnv || isDevelopmentEnv) && [
         '@babel/preset-env',
         {
           forceAllTransforms: true,
@@ -76,7 +77,7 @@ module.exports = function(api) {
           async: false
         }
       ],
-      isProductionEnv && [
+        (isProductionEnv || isStagingEnv) && [
         'babel-plugin-transform-react-remove-prop-types',
         {
           removeImport: true
