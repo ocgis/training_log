@@ -209,7 +209,7 @@ class NewTrainingForm extends React.Component {
     renderInterval(interval, index) {
         if (!interval._destroy) {
             return (<Row key={index}>
-                    <Col>
+                    <Col span={7}>
                     <Form.Item
                     name={["training", "intervals_attributes", index, "duration_hh_mm_ss"]}
                     rules={notRequired}
@@ -222,7 +222,7 @@ class NewTrainingForm extends React.Component {
                     <Input placeholder="Duration" />
                     </Form.Item>
                     </Col>
-                    <Col>
+                    <Col span={7}>
                     <Form.Item
                     name={["training", "intervals_attributes", index, "distance_m"]}
                     rules={notRequired}
@@ -235,7 +235,7 @@ class NewTrainingForm extends React.Component {
                     <Input placeholder="Distance" />
                     </Form.Item>
                     </Col>
-                    <Col>
+                    <Col span={7}>
                     <Form.Item
                     name={["training", "intervals_attributes", index, "comment"]}
                     rules={notRequired}
