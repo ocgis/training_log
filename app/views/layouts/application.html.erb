@@ -4,16 +4,24 @@
     <title><%= ("TrainingLog" + (" - " unless yield(:title).blank?).to_s) + yield(:title) %></title>
     <%= csrf_meta_tags %>
 
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_link_tag    'application', media: 'all' %>
+    <%= javascript_include_tag 'application' %>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <%= javascript_pack_tag 'application' %>
     <%= stylesheet_pack_tag 'application' %>
+    <%= javascript_pack_tag 'Index' %>
   </head>
 
   <body>
     <ul class="hmenu">
-      <%= link_to "Overview", root_path %>
-      <%= link_to "New training", new_training_path %>
+      <% if (not current_user.nil?) and (current_user.people.size > 0) %>
+      <li>
+        <%= link_to "Overview", "/people/" + current_user.people[0].id.to_s %>
+      </li>
+      <li>
+        <%= link_to "New training", "/trainings/new" %>
+      </li>
+      <% end %>
       <%= render 'devise/menu/registration_items' %>
       <%= render 'devise/menu/login_items' %>
     </ul>

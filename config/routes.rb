@@ -1,18 +1,18 @@
 Rails.application.routes.draw do
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
-  resources :route_points
-  resources :routes
-  resources :intervals
-  resources :trainings
-  resources :people
-  get 'people/index'
 
-  get 'people/show'
+  namespace :api do
+    namespace :v1 do
+      resources :trainings
+      resources :people
+    end
+  end
 
   get 'root/index'
   get 'root/error'
 
   root 'root#index'
+  get '/*path' => 'root#index'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

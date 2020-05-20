@@ -13,7 +13,7 @@ const layout = {
 };
 
 
-class NewTrainingForm extends React.Component {
+class TrainingForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = JSON.parse(JSON.stringify(this.props));
@@ -29,8 +29,6 @@ class NewTrainingForm extends React.Component {
     render () {
         return (<Form
                 {...layout}
-                action={`/trainings/${this.props.id}`}
-                method="patch"
                 name="training"
                 initialValues={{ training: this.state.training }}
                 onFinish={this.onFinish}
@@ -272,15 +270,15 @@ class NewTrainingForm extends React.Component {
         const csrfToken = document.querySelector('[name=csrf-token]').content
         console.log('CSRF token:', csrfToken);
         axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken
-        if(this.props.id == null) {
-            axios.post('/trainings', this.state)
+        if((this.state.training.id === null) || (this.state.training.id === undefined)) {
+            axios.post('/api/v1/trainings', this.state)
                 .then(resp => { console.log(resp);
                                 window.location.href = "/"; })
                 .catch(error => console.log(error))
         } else {
-            axios.patch(`/trainings/${this.props.id}`, this.state)
+            axios.patch(`/api/v1/trainings/${this.state.training.id}`, this.state)
                 .then(resp => { console.log(resp);
-                                window.location.href = `/trainings/${this.props.id}`;
+                                window.location.href = `/trainings/${this.state.training.id}`;
                               })
                 .catch(error => { console.log(error) })
                       
@@ -293,4 +291,4 @@ class NewTrainingForm extends React.Component {
     };
 }
 
-export default NewTrainingForm
+export default TrainingForm
