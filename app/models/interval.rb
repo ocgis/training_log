@@ -60,5 +60,9 @@ class Interval < ApplicationRecord
     end
   end
 
+  def all_attributes
+    return attributes.update(duration_hh_mm_ss: duration_hh_mm_ss,
+                             distance_km: distance_km)
+  end
 
 end
