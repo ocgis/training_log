@@ -78,13 +78,13 @@ class ShowPerson extends React.Component {
             <div key={index}>
                   <Link to={"/trainings/"+training.id}>
               <Row>
-                <Col xs={4} sm={3} md={3} lg={2} xl={2}>
+                <Col xs={5} sm={3} md={3} lg={2} xl={2}>
                     {training.date_yyyy_mm_dd}
                 </Col>
-                <Col xs={4} sm={3} md={3} lg={2} xl={2}>
+                <Col xs={5} sm={3} md={3} lg={2} xl={2}>
                     {training.kind}
                 </Col>
-                <Col xs={4} sm={3} md={3} lg={2} xl={2}>
+                <Col xs={5} sm={3} md={3} lg={2} xl={2}>
                   {training.duration_hh_mm_ss}
                 </Col>
                 <Col>
@@ -106,7 +106,7 @@ class ShowPerson extends React.Component {
                                                 {
                                                     return (
                                                         <Row key={index}>
-                                                          <Col xs={4} sm={3} md={3} lg={2} xl={2}/>
+                                                          <Col xs={5} sm={3} md={3} lg={2} xl={2}/>
                                                           <Col>
                                                             { line }
                                                           </Col>
