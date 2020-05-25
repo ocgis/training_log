@@ -196,10 +196,9 @@ class TrainingForm extends React.Component {
 
                 <Form.Item>
                 <Button type="primary" htmlType="submit">
-                Submit
+                Create training
                 </Button>
                 </Form.Item>
-                <input type="submit" name="commit" value="Create training" />
                 </Form>
                );
     }
