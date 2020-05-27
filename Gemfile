@@ -68,3 +68,6 @@ gem 'cocoon'
 # React
 gem 'webpacker'
 gem 'react-rails'
+
+# FIT
+gem 'rubyfit'

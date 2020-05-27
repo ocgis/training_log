@@ -184,6 +184,7 @@ GEM
       actionpack (>= 5.0)
       railties (>= 5.0)
     role_model (0.8.2)
+    rubyfit (0.0.16)
     sass (3.7.4)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
@@ -256,6 +257,7 @@ DEPENDENCIES
   rails (~> 5.0.0)
   react-rails
   role_model
+  rubyfit
   sass-rails (~> 5.0)
   spring
   spring-watcher-listen (~> 2.0.0)
