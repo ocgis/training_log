@@ -10,6 +10,12 @@
     <%= javascript_pack_tag 'application' %>
     <%= stylesheet_pack_tag 'application' %>
     <%= javascript_pack_tag 'Index' %>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+      integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+      crossorigin=""
+      />
   </head>
 
   <body>
@@ -20,6 +26,9 @@
       </li>
       <li>
         <%= link_to "New training", "/trainings/new" %>
+      </li>
+      <li>
+        <%= link_to "Routes", "/routes" %>
       </li>
       <% end %>
       <%= render 'devise/menu/registration_items' %>

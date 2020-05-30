@@ -1,4 +1,4 @@
-class RoutesController < ApplicationController
+class Api::V1::RoutesController < ApplicationController
 
   load_and_authorize_resource
 
@@ -8,11 +8,24 @@ class RoutesController < ApplicationController
   # GET /routes.json
   def index
     @routes = Route.all
+    render json: @routes
   end
 
   # GET /routes/1
   # GET /routes/1.json
   def show
+    trainings_hash = @route.trainings.map {
+      |training| training.attributes
+    }
+
+    route_points_hash = @route.route_points.map {
+      |route_point| route_point.attributes
+    }
+
+    route_hash = @route.attributes.update({person: @route.person.attributes,
+                                           route_points: route_points_hash,
+                                           trainings: trainings_hash} )
+    render json: route_hash
   end
 
   # GET /routes/new
