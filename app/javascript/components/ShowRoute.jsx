@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Map, Marker, Polyline, Popup, TileLayer } from 'react-leaflet'
+import { Map, Marker, Polyline, Popup, TileLayer } from 'react-leaflet';
+import { TrainingsList } from './Training';
 
 //const position = [51.505, -0.09]
 
@@ -64,7 +65,8 @@ class Route extends React.Component {
                     </Marker>
                     <Polyline positions={polyline} />
                   </Map>
-                  
+
+                  <TrainingsList trainings={route.trainings} />
                 </div>
             );
         } else {

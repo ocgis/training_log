@@ -15,7 +15,7 @@ class Api::V1::RoutesController < ApplicationController
   # GET /routes/1.json
   def show
     trainings_hash = @route.trainings.map {
-      |training| training.attributes
+      |training| training.all_attributes
     }
 
     route_points_hash = @route.route_points.map {
