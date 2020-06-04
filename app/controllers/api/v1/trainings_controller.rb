@@ -10,7 +10,15 @@ class Api::V1::TrainingsController < ApplicationController
   end
 
   def show
-    training_hash = @training.all_attributes.update({intervals_attributes: @training.intervals.map { |interval| interval.all_attributes.except('duration_s', 'ix', 'training_id', 'created_at', 'updated_at').update({'_destroy' => 0 }) } })
+    intervals_attributes = @training.intervals.map {
+      |interval| interval.all_attributes.except('duration_s', 'ix', 'training_id', 'created_at', 'updated_at').update({'_destroy' => 0 })
+    }
+
+    training_hash = @training.all_attributes.update({intervals_attributes: intervals_attributes })
+    if not @training.route.nil?
+      training_hash = training_hash.update({route: @training.route.all_attributes})
+    end
+    
     render json: training_hash
   end
 

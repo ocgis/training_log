@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Route } from "./Route";
 
 class Training extends React.Component {
     constructor(props) {
@@ -54,6 +55,7 @@ class Training extends React.Component {
                   {this.renderField("Energiförbrukning:", training.energy_kcal, "kcal")}
                   {this.renderField("Intensitet:", training.intensity, "")}
                   {this.renderIntervals(training.intervals_attributes)}
+                  <Route route={training.route} />
                   <Link to={"/trainings/"+id+"/edit"}>
                     Edit
                   </Link>

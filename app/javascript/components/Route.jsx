@@ -5,7 +5,7 @@ import { TrainingsList } from './Training';
 
 //const position = [51.505, -0.09]
 
-class Route extends React.Component {
+class ShowRoute extends React.Component {
     constructor(props) {
         super(props);
         this.state = { route: null };
@@ -47,25 +47,7 @@ class Route extends React.Component {
             var polyline = route.route_points.map(p => [p.latitude, p.longitude]);
             return (
                 <div>
-                  <div>
-                    {route.name}
-                    {" "}
-                    {route.distance_km}
-                    <Link to={"/routes/"+id+"/edit"}>
-                      Edit
-                    </Link>
-                  </div>
-                  <Map center={startPosition} zoom={13}>
-                    <TileLayer
-                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                      attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
-                      />
-                    <Marker position={startPosition}>
-                      <Popup>Start</Popup>
-                    </Marker>
-                    <Polyline positions={polyline} />
-                  </Map>
-
+                  <Route route={route} />
                   <TrainingsList trainings={route.trainings} />
                 </div>
             );
@@ -76,4 +58,41 @@ class Route extends React.Component {
 }
 
 
-export default Route;
+class Route extends React.Component {
+    render() {
+        const { route } = this.props;
+
+        if (route == null) {
+            return null;
+        }
+ 
+        var startPosition = [route.route_points[0].latitude,
+                             route.route_points[0].longitude];
+        var polyline = route.route_points.map(p => [p.latitude, p.longitude]);
+        return (
+            <div>
+              <div>
+                {route.name}
+                {" "}
+                {route.distance_km}
+                <Link to={"/routes/"+route.id+"/edit"}>
+                  Edit
+                </Link>
+              </div>
+              <Map center={startPosition} zoom={13}>
+                <TileLayer
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
+                  />
+                <Marker position={startPosition}>
+                  <Popup>Start</Popup>
+                </Marker>
+                <Polyline positions={polyline} />
+              </Map>
+            </div>
+        );
+    }
+}
+
+
+export { ShowRoute, Route };

@@ -6,7 +6,7 @@ import ShowTraining from "../components/ShowTraining";
 import NewTraining from "../components/NewTraining";
 import EditTraining from "../components/EditTraining";
 import IndexRoutes from "../components/IndexRoutes";
-import ShowRoute from "../components/ShowRoute";
+import { ShowRoute } from "../components/Route";
 
 export default (
   <Router>
