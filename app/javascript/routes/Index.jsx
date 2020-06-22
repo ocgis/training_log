@@ -7,6 +7,7 @@ import NewTraining from "../components/NewTraining";
 import EditTraining from "../components/EditTraining";
 import IndexRoutes from "../components/IndexRoutes";
 import { ShowRoute } from "../components/Route";
+import { ShowRawfile, UploadRawfile } from "../components/Rawfile";
 
 export default (
   <Router>
@@ -51,6 +52,18 @@ export default (
         path="/routes"
         exact
         component={IndexRoutes}
+        />
+
+      <Route
+        path="/rawfiles/new"
+        exact
+        component={UploadRawfile}
+        />
+
+      <Route
+        path="/rawfiles/:id"
+        exact
+        component={ShowRawfile}
         />
 
     </Switch>

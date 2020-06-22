@@ -1,0 +1,2 @@
+class Rawfile < ApplicationRecord
+end

@@ -4,6 +4,11 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :trainings
+      resources :rawfiles, only: [:show] do
+        collection do
+          post :upload
+        end
+      end
       resources :people
       resources :routes
     end

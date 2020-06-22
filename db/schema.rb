@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200111073037) do
+ActiveRecord::Schema.define(version: 20200617175938) do
 
   create_table "intervals", force: :cascade do |t|
     t.integer  "duration_s"
@@ -30,6 +30,15 @@ ActiveRecord::Schema.define(version: 20200111073037) do
     t.datetime "updated_at", null: false
     t.integer  "user_id"
     t.index ["user_id"], name: "index_people_on_user_id"
+  end
+
+  create_table "rawfiles", force: :cascade do |t|
+    t.string   "filename"
+    t.string   "orig_filename"
+    t.string   "content_type"
+    t.integer  "size"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
   create_table "route_points", force: :cascade do |t|
