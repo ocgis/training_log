@@ -1,3 +1,5 @@
+require 'readfit'
+
 class Api::V1::RawfilesController < ApplicationController
   load_and_authorize_resource
 
@@ -9,19 +11,18 @@ class Api::V1::RawfilesController < ApplicationController
     content_type = params[:file].content_type
     mtime = Time.at(params[:last_modified].to_i/1000)
 
-    storage_root = File.join("#{Rails.root}", "storage")
     filename = original_filename
-    file_path = File.join(storage_root, filename)
+    file_path = full_path(filename)
     index = 0
     while File.exists?(file_path)
       index = index + 1
       filename = original_filename + '.' + index.to_s
-      file_path = File.join(storage_root, filename)
+      file_path = full_path(filename)
     end
 
     Rawfile.where(size: tempfile.size,
                   content_type: content_type).each do |cmp_file|
-      if FileUtils.cmp(File.join(storage_root, cmp_file.filename), tempfile.path)
+      if FileUtils.cmp(full_path(cmp_file.filename), tempfile.path)
         # File was already uploaded: render original
         render json: cmp_file
 
@@ -46,12 +47,17 @@ class Api::V1::RawfilesController < ApplicationController
 
 
   def show
-    render json: @rawfile
+    fitfile = ReadFit(full_path(@rawfile.filename))
+    render json: @rawfile.attributes.update({fitfile: fitfile})
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_rawfile
       @rawfile = Rawfile.find(params[:id])
+    end
+
+    def full_path(filename)
+      return File.join("#{Rails.root}", "storage", filename)
     end
 end
