@@ -37,7 +37,7 @@ class Ability
       can [:index, :show, :edit, :update, :new, :create], Person
       can [:show, :edit, :update, :new, :create, :upload], Training
       can [:index, :show], Route
-      can [:show, :upload], Rawfile
+      can [:index, :show, :upload], Rawfile
     end
   end
 end

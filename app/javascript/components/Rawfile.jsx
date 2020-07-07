@@ -1,7 +1,8 @@
 import React from "react";
 import axios from 'axios';
+import { Link } from "react-router-dom";
 import { Map, Marker, Polyline, Popup, TileLayer } from 'react-leaflet';
-import { Descriptions, Table } from 'antd';
+import { Descriptions, Table, Col, Row } from 'antd';
 
 class ShowRawfile extends React.Component {
 
@@ -270,4 +271,82 @@ class UploadRawfile extends React.Component {
     }  
 }
 
-export { ShowRawfile, UploadRawfile };
+
+class IndexRawfiles extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { rawfiles: null };
+    }
+
+    componentDidMount() {
+        const url = `/api/v1/rawfiles`;
+
+        fetch(url)
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error("Network response was not ok.");
+            })
+            .then(response => {
+                this.setState({ rawfiles: response });
+            })
+            .catch(() => this.props.history.push("/"));
+    }
+
+    render() {
+        const { rawfiles } = this.state;
+
+        if (rawfiles !== null) {
+            return (
+                <div>
+                  <h1>Uploaded files</h1>
+                  {this.renderRawfiles(rawfiles)}
+                </div>
+            );
+        } else {
+            return (<h1>Loading</h1>);
+        }
+    }
+
+    renderRawfiles(rawfiles) {
+        if (rawfiles.length > 0) {
+            return (<div>
+                    {
+                        rawfiles.map((rawfile, index) =>
+                                     {
+                                         return this.renderRawfile(rawfile, index);
+                                     }
+                                    )
+                    }
+                    </div>
+                   );
+        } else {
+            return null;
+        }
+    }
+
+
+    renderRawfile(rawfile, index) {
+        return (
+            <div key={index}>
+              <Link to={"/rawfiles/"+rawfile.id}>
+                <Row>
+                  <Col xs={7} sm={5} md={5} lg={4} xl={4}>
+                    {rawfile.orig_filename}
+                  </Col>
+                  <Col xs={7} sm={5} md={5} lg={4} xl={4}>
+                    {rawfile.content_type}
+                  </Col>
+                  <Col xs={5} sm={3} md={3} lg={2} xl={2}>
+                    {rawfile.size}
+                  </Col>
+                </Row>
+              </Link>
+            </div>
+        );
+    }
+}
+
+
+export { ShowRawfile, UploadRawfile, IndexRawfiles };
