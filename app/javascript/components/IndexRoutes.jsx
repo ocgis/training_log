@@ -10,12 +10,6 @@ class ShowRoutes extends React.Component {
     }
 
     componentDidMount() {
-        const {
-            match: {
-                params: { id }
-            }
-        } = this.props;
-
         const url = `/api/v1/routes`;
 
         fetch(url)
