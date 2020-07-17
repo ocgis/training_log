@@ -47,6 +47,19 @@ class Api::V1::TrainingsController < ApplicationController
   def destroy
   end
 
+
+  def search
+    date = params[:date].to_datetime.beginning_of_day
+
+    trainings = Training.where("date >= :min AND date < :max", min: date, max: date.days_since(1))
+    trainings_hash = trainings.map {
+      |training| training.all_attributes
+    }
+
+    render json: {result: trainings_hash }
+  end
+
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_training

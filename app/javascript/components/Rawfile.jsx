@@ -2,15 +2,17 @@ import React from "react";
 import axios from 'axios';
 import { Link } from "react-router-dom";
 import { Map, Marker, Polyline, Popup, TileLayer } from 'react-leaflet';
-import { Descriptions, Table, Col, Row } from 'antd';
+import { Descriptions, Table, Col, Row, Button } from 'antd';
 
 class ShowRawfile extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            rawfile: null
+            rawfile: null,
+            suggestedTrainings: null
         }
+        this.connectTrainingHandler = this.connectTrainingHandler.bind(this);
     }
 
     componentDidMount() {
@@ -20,17 +22,25 @@ class ShowRawfile extends React.Component {
             }
         } = this.props;
 
-        const url = `/api/v1/rawfiles/${id}`;
+        const csrfToken = document.querySelector('[name=csrf-token]').content;
+        axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
 
-        fetch(url)
+        axios.get(`/api/v1/rawfiles/${id}`)
             .then(response => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw new Error("Network response was not ok.");
-            })
-            .then(response => {
-                this.setState({ rawfile: response });
+                const rawfile = response.data;
+                const date = toDateTime(rawfile.fitfile.activities[0].local_timestamp);
+
+                const data = new FormData();
+                data.append('date', date);
+
+                axios.post("/api/v1/trainings/search", data, {
+                    // receive two    parameter endpoint url ,form data
+                })
+                    .then(response => {
+                        const suggestedTrainings = response.data.result;
+                        this.setState({ rawfile: rawfile,
+                                        suggestedTrainings: suggestedTrainings });
+                    });
             })
             .catch(() => this.props.history.push("/"));
     }
@@ -45,8 +55,10 @@ class ShowRawfile extends React.Component {
         } = this.props;
 
         if (rawfile !== null) {
+            // FIXME: TrainingInfo should probably go in ShowFitfile
             return (
                 <div>
+                  {this.trainingInfo()}
                   {rawfile.orig_filename}
                   <br />
                   {rawfile.content_type}
@@ -58,6 +70,93 @@ class ShowRawfile extends React.Component {
         } else {
             return (<h1>Loading</h1>);
         }
+    }
+
+
+    trainingInfo() {
+        const training = this.state.rawfile.training;
+
+        if (training == null) {
+            return (<React.Fragment>
+                    {this.suggestTrainings()}
+                    </React.Fragment>);
+        } else {
+            const columns = [
+                {
+                    title: 'Date',
+                    dataIndex: 'date'
+                },
+                {
+                    title: 'Kind',
+                    dataIndex: 'kind'
+                },
+                {
+                    title: 'Duration',
+                    dataIndex: 'duration_hh_mm_ss'
+                },
+                {
+                    title: 'Create',
+                    dataIndex: 'id',
+                    render: id => (<Button onClick={this.connectTrainingHandler} data-id={null}>Detach</Button>)
+                }
+            ];
+            return (<Table columns={columns} dataSource={[training]} rowKey="id" />);
+        }
+    }
+
+
+    suggestTrainings() {
+        const date = toDateTime(this.state.rawfile.fitfile.activities[0].local_timestamp);
+
+        if (this.state.suggestedTrainings == null) {
+            return (<h3>Loading</h3>);
+        } else {
+            if (this.state.suggestedTrainings.length == 0) {
+                return (<h3>No matching trainings</h3>);
+            } else {
+                const columns = [
+                    {
+                        title: 'Date',
+                        dataIndex: 'date'
+                    },
+                    {
+                        title: 'Kind',
+                        dataIndex: 'kind'
+                    },
+                    {
+                        title: 'Duration',
+                        dataIndex: 'duration_hh_mm_ss'
+                    },
+                    {
+                        title: 'Create',
+                        dataIndex: 'id',
+                        render: id => (<Button onClick={this.connectTrainingHandler} data-id={id}>Attach</Button>)
+                    }
+                ];
+                return (<Table columns={columns} dataSource={this.state.suggestedTrainings} rowKey="id" />);
+            }
+        }
+    }
+
+
+    connectTrainingHandler(event) {
+        const id = this.state.rawfile.id;
+        const data = new FormData();
+        var rawfile = this.state.rawfile;
+
+        rawfile.training_id = event.target.getAttribute('data-id');
+
+        Object.keys(rawfile).forEach(function (key) {
+            data.append('rawfile[' + key + ']', rawfile[key]);
+        });
+
+        const csrfToken = document.querySelector('[name=csrf-token]').content;
+        axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
+        axios.patch(`/api/v1/rawfiles/${id}`, data, {
+            // receive two    parameter endpoint url ,form data
+        }).then(res => { // then print response status
+            window.location.href = `/rawfiles/${res.data.id}`;
+        })
     }
 }
 
@@ -238,7 +337,7 @@ class UploadRawfile extends React.Component {
         super(props);
         this.state = {
             selectedFile: null
-        }
+        };
         this.onChangeHandler = this.onChangeHandler.bind(this);
         this.onClickHandler = this.onClickHandler.bind(this);
     }
@@ -258,12 +357,12 @@ class UploadRawfile extends React.Component {
     }
 
     onClickHandler() {
-        const data = new FormData()
-        data.append('file', this.state.selectedFile)
-        data.append('last_modified', this.state.selectedFile.lastModified)
-        const csrfToken = document.querySelector('[name=csrf-token]').content
-        axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken
-        axios.post("/api/v1/rawfiles/upload", data, { 
+        const data = new FormData();
+        data.append('file', this.state.selectedFile);
+        data.append('last_modified', this.state.selectedFile.lastModified);
+        const csrfToken = document.querySelector('[name=csrf-token]').content;
+        axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
+        axios.post("/api/v1/rawfiles/upload", data, {
             // receive two    parameter endpoint url ,form data
         }).then(res => { // then print response status
             window.location.href = `/rawfiles/${res.data.id}`;

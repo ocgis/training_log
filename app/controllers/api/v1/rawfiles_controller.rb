@@ -3,7 +3,7 @@ require 'readfit'
 class Api::V1::RawfilesController < ApplicationController
   load_and_authorize_resource
 
-  before_action :set_rawfile, only: [:show]
+  before_action :set_rawfile, only: [:show, :update]
 
   def upload
     tempfile = params[:file].tempfile
@@ -47,14 +47,25 @@ class Api::V1::RawfilesController < ApplicationController
 
 
   def show
+    # FIXME: Check if this is a fitfile
     fitfile = ReadFit(full_path(@rawfile.filename))
-    render json: @rawfile.attributes.update({fitfile: fitfile})
+    render json: @rawfile.all_attributes.update({fitfile: fitfile})
   end
 
 
   def index
     @rawfiles = Rawfile.all
     render json: @rawfiles
+  end
+
+
+  def update
+    if @rawfile.update(rawfile_params)
+      fitfile = ReadFit(full_path(@rawfile.filename))
+      render json: @rawfile.all_attributes.update({fitfile: fitfile})
+    else
+      render json: @rawfile.errors
+    end
   end
 
 
@@ -66,5 +77,9 @@ class Api::V1::RawfilesController < ApplicationController
 
     def full_path(filename)
       return File.join("#{Rails.root}", "storage", filename)
+    end
+
+    def rawfile_params
+      params.require(:rawfile).permit(:filename, :orig_filename, :content_type, :size, :training_id)
     end
 end

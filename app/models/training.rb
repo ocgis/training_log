@@ -1,6 +1,7 @@
 class Training < ApplicationRecord
   belongs_to :person
   has_many :intervals, dependent: :destroy
+  has_many :rawfiles, dependent: :destroy
   accepts_nested_attributes_for :intervals, allow_destroy: true
   before_save :prepare_training
   validates :kind, presence: true
