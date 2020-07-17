@@ -57,17 +57,10 @@ class ShowRawfile extends React.Component {
 
         if (rawfile !== null) {
             // FIXME: TrainingInfo should probably go in ShowFitfile
-            return (
-                <div>
-                  {this.trainingInfo()}
-                  {rawfile.orig_filename}
-                  <br />
-                  {rawfile.content_type}
-                  <br />
-                  {rawfile.size}
-                  <ShowFitfile fitfile={rawfile.fitfile} />
-                </div>
-            );
+            return (<div>
+                    {this.trainingInfo()}
+                    <Rawfile rawfile={rawfile} />
+                    </div>);
         } else {
             return (<h1>Loading</h1>);
         }
@@ -142,6 +135,21 @@ class ShowRawfile extends React.Component {
         }).then(res => { // then print response status
             window.location.href = `/rawfiles/${res.data.id}`;
         })
+    }
+}
+
+
+class Rawfile extends React.Component {
+    render() {
+        const { rawfile } = this.props;
+        return (<div>
+                {rawfile.orig_filename}
+                <br />
+                {rawfile.content_type}
+                <br />
+                {rawfile.size}
+                <ShowFitfile fitfile={rawfile.fitfile} />
+                </div>);
     }
 }
 
@@ -433,4 +441,4 @@ class IndexRawfiles extends React.Component {
 }
 
 
-export { ShowRawfile, UploadRawfile, IndexRawfiles };
+export { ShowRawfile, Rawfile, UploadRawfile, IndexRawfiles };

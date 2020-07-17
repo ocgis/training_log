@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Route } from "./Route";
+import { Rawfile } from "./Rawfile";
 
 class Training extends React.Component {
     constructor(props) {
@@ -56,6 +57,13 @@ class Training extends React.Component {
                   {this.renderField("Intensitet:", training.intensity, "")}
                   {this.renderIntervals(training.intervals_attributes)}
                   <Route route={training.route} />
+                  {
+                      training.rawfiles.map((rawfile, index) =>
+                                            {
+                                                return (<Rawfile key={index} rawfile={rawfile} />);
+                                            }
+                                           )
+                  }
                   <Link to={"/trainings/"+id+"/edit"}>
                     Edit
                   </Link>

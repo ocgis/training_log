@@ -1,3 +1,5 @@
+require 'readfit'
+
 class Api::V1::TrainingsController < ApplicationController
   load_and_authorize_resource
 
@@ -18,6 +20,18 @@ class Api::V1::TrainingsController < ApplicationController
     if not @training.route.nil?
       training_hash = training_hash.update({route: @training.route.all_attributes})
     end
+
+    rawfiles = []
+    @training.rawfiles.each do |rawfile|
+      rawfile_hash = rawfile.attributes
+
+      # FIXME: Check if this is a fitfile
+      fitfile = ReadFit(full_path(rawfile_hash['filename']))
+      rawfile_hash = rawfile_hash.update({fitfile: fitfile})
+      rawfiles.append(rawfile_hash)
+    end
+
+    training_hash = training_hash.update({rawfiles: rawfiles})
     
     render json: training_hash
   end
@@ -69,5 +83,10 @@ class Api::V1::TrainingsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def training_params
       params.require(:training).permit(:kind, :date, :description, :duration_hh_mm_ss, :distance_m, :max_pulse_bpm, :avg_pulse_bpm, :energy_kcal, :intensity, :altid, :route_id, :person_id, intervals_attributes: [:id, :duration_hh_mm_ss, :distance_m, :comment, :_destroy])
+    end
+
+    # FIXME: Duplicated in rawfiles_controller
+    def full_path(filename)
+      return File.join("#{Rails.root}", "storage", filename)
     end
 end
