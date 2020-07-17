@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Link } from "react-router-dom";
 import { Map, Marker, Polyline, Popup, TileLayer } from 'react-leaflet';
 import { Descriptions, Table, Col, Row, Button } from 'antd';
+import { TrainingsListItem } from "./Training";
 
 class ShowRawfile extends React.Component {
 
@@ -81,26 +82,10 @@ class ShowRawfile extends React.Component {
                     {this.suggestTrainings()}
                     </React.Fragment>);
         } else {
-            const columns = [
-                {
-                    title: 'Date',
-                    dataIndex: 'date'
-                },
-                {
-                    title: 'Kind',
-                    dataIndex: 'kind'
-                },
-                {
-                    title: 'Duration',
-                    dataIndex: 'duration_hh_mm_ss'
-                },
-                {
-                    title: 'Create',
-                    dataIndex: 'id',
-                    render: id => (<Button onClick={this.connectTrainingHandler} data-id={null}>Detach</Button>)
-                }
-            ];
-            return (<Table columns={columns} dataSource={[training]} rowKey="id" />);
+            return (<div>
+                    <TrainingsListItem key="1" training={training} />
+                    <Button onClick={this.connectTrainingHandler} data-id={null}>Detach training</Button>
+                    </div>);
         }
     }
 

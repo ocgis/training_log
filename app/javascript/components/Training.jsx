@@ -82,4 +82,4 @@ class Description extends React.Component {
     }
 }
 
-export { TrainingsList }
+export { TrainingsList, TrainingsListItem }
