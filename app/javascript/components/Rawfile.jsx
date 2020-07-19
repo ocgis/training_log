@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Map, Marker, Polyline, Popup, TileLayer } from 'react-leaflet';
 import { Descriptions, Table, Col, Row, Button } from 'antd';
 import { TrainingsListItem } from "./Training";
+import TrainingForm from "./TrainingForm";
 
 class ShowRawfile extends React.Component {
 
@@ -11,7 +12,8 @@ class ShowRawfile extends React.Component {
         super(props);
         this.state = {
             rawfile: null,
-            suggestedTrainings: null
+            suggestedTrainings: null,
+            createNewTraining: false
         }
         this.connectTrainingHandler = this.connectTrainingHandler.bind(this);
     }
@@ -89,8 +91,30 @@ class ShowRawfile extends React.Component {
         if (this.state.suggestedTrainings == null) {
             return (<h3>Loading</h3>);
         } else {
-            if (this.state.suggestedTrainings.length == 0) {
-                return (<h3>No matching trainings</h3>);
+            if (this.state.createNewTraining) {
+                const rawfile = this.state.rawfile;
+                const activity = rawfile.fitfile.activities[0];
+                const session = rawfile.fitfile.sessions[0];
+                const laps = rawfile.fitfile.laps;
+                const training = {
+                    kind: 'Löpning', // FIXME
+                    date: toDateTime(activity.local_timestamp),
+                    duration_hh_mm_ss: toHHMMSS(activity.total_timer_time),
+                    distance_m: session.total_distance,
+                    max_pulse_bpm: session.max_heart_rate,
+                    avg_pulse_bpm: session.avg_heart_rate,
+                    energy_kcal: session.total_calories,
+                    intensity: session.total_training_effect,
+                    intervals_attributes: laps.map(lap => ({ _destroy: false ,
+                                                             duration_hh_mm_ss: toHHMMSS(lap.total_timer_time),
+                                                             distance_m: lap.total_distance }))
+                };
+                return (<div>
+                        <TrainingForm training={training}/>
+                        {this.cancelNewTrainingButton()}
+                        </div>);
+            } else if (this.state.suggestedTrainings.length == 0) {
+                return this.createNewTrainingButton();
             } else {
                 const columns = [
                     {
@@ -111,11 +135,29 @@ class ShowRawfile extends React.Component {
                         render: id => (<Button onClick={this.connectTrainingHandler} data-id={id}>Attach</Button>)
                     }
                 ];
-                return (<Table columns={columns} dataSource={this.state.suggestedTrainings} rowKey="id" />);
+                return (<React.Fragment>
+                        {this.createNewTrainingButton()}
+                        <Table columns={columns} dataSource={this.state.suggestedTrainings} rowKey="id" />
+                        </React.Fragment>);
             }
         }
     }
 
+
+    createNewTrainingButton() {
+        const _this = this;
+
+        return (<Button onClick={ () => { _this.state.createNewTraining = true;
+                                          _this.setState(_this.state); } }>Create new training</Button>);
+    }
+
+
+    cancelNewTrainingButton() {
+        const _this = this;
+
+        return (<Button onClick={ () => { _this.state.createNewTraining = false;
+                                          _this.setState(_this.state); } }>Cancel</Button>);
+    }
 
     connectTrainingHandler(event) {
         const id = this.state.rawfile.id;
@@ -233,6 +275,8 @@ class SessionDescription extends React.Component {
                 <Descriptions.Item label="Maxpuls">{session.max_heart_rate}</Descriptions.Item>
                 <Descriptions.Item label="Uppstigning">{session.total_ascent}</Descriptions.Item>
                 <Descriptions.Item label="Nedstigning">{session.total_descent}</Descriptions.Item>
+                <Descriptions.Item label="Energiförbrukning">{session.total_calories + " kcal"}</Descriptions.Item>
+                <Descriptions.Item label="Intensitet">{session.total_training_effect}</Descriptions.Item>
                 </Descriptions>);
     }
 }
