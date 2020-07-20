@@ -16,6 +16,7 @@ class ShowRawfile extends React.Component {
             createNewTraining: false
         }
         this.connectTrainingHandler = this.connectTrainingHandler.bind(this);
+        this.afterSubmitTraining = this.afterSubmitTraining.bind(this);
     }
 
     componentDidMount() {
@@ -110,7 +111,7 @@ class ShowRawfile extends React.Component {
                                                              distance_m: lap.total_distance }))
                 };
                 return (<div>
-                        <TrainingForm training={training}/>
+                        <TrainingForm training={training} afterSubmit={this.afterSubmitTraining} />
                         {this.cancelNewTrainingButton()}
                         </div>);
             } else if (this.state.suggestedTrainings.length == 0) {
@@ -160,11 +161,22 @@ class ShowRawfile extends React.Component {
     }
 
     connectTrainingHandler(event) {
+        this.patchTrainingId(event.target.getAttribute('data-id'));
+    }
+
+
+    afterSubmitTraining(response) {
+        const training = response.data;
+        this.patchTrainingId(training.id);
+    }
+
+
+    patchTrainingId(trainingId) {
         const id = this.state.rawfile.id;
         const data = new FormData();
         var rawfile = this.state.rawfile;
 
-        rawfile.training_id = event.target.getAttribute('data-id');
+        rawfile.training_id = trainingId;
 
         Object.keys(rawfile).forEach(function (key) {
             data.append('rawfile[' + key + ']', rawfile[key]);
@@ -174,8 +186,9 @@ class ShowRawfile extends React.Component {
         axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
         axios.patch(`/api/v1/rawfiles/${id}`, data, {
             // receive two    parameter endpoint url ,form data
-        }).then(res => { // then print response status
-            window.location.href = `/rawfiles/${res.data.id}`;
+        }).then(response => {
+            this.state.rawfile = response.data;
+            this.setState(this.state);
         })
     }
 }

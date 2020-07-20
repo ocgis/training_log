@@ -6,6 +6,7 @@ class EditTraining extends React.Component {
     constructor(props) {
         super(props);
         this.state = { training: null };
+        this.afterSubmit = this.afterSubmit.bind(this);
     }
 
     componentDidMount() {
@@ -41,12 +42,18 @@ class EditTraining extends React.Component {
         if (training !== null) {
             return (
                 <div>
-                  <TrainingForm training={training}/>
+                  <TrainingForm training={training} afterSubmit={this.afterSubmit} />
                 </div>
             );
         } else {
             return (<h1>Loading...</h1>);
         }
+    }
+
+
+    afterSubmit(response) {
+        const training = response.data;
+        window.location.href = `/trainings/${training.id}`;
     }
 }
 

@@ -263,22 +263,16 @@ class TrainingForm extends React.Component {
 
     onFinish = values => {
         values.training.date = values.training.date.toISOString();
-        console.log('Success:', values.training);
-        console.log('State:', this.state.training);
 
         const csrfToken = document.querySelector('[name=csrf-token]').content
-        console.log('CSRF token:', csrfToken);
         axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken
-        if((this.state.training.id === null) || (this.state.training.id === undefined)) {
+        if(this.state.training.id == null) {
             axios.post('/api/v1/trainings', this.state)
-                .then(resp => { console.log(resp);
-                                window.location.href = "/"; })
+                .then(resp => { this.props.afterSubmit(resp); })
                 .catch(error => console.log(error))
         } else {
             axios.patch(`/api/v1/trainings/${this.state.training.id}`, this.state)
-                .then(resp => { console.log(resp);
-                                window.location.href = `/trainings/${this.state.training.id}`;
-                              })
+                .then(resp => { this.props.afterSubmit(resp); })
                 .catch(error => { console.log(error) })
                       
         }

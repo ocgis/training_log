@@ -6,6 +6,7 @@ class NewTraining extends React.Component {
     constructor(props) {
         super(props);
         this.state = { training: { intervals_attributes: [] } };
+        this.afterSubmit = this.afterSubmit.bind(this);
     }
 
     render() {
@@ -13,9 +14,14 @@ class NewTraining extends React.Component {
 
         return (
             <div>
-              <TrainingForm training={training}/>
+              <TrainingForm training={training} afterSubmit={this.afterSubmit} />
             </div>
         );
+    }
+
+
+    afterSubmit(resp) {
+        window.location.href = "/";
     }
 }
 
