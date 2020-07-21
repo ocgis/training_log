@@ -173,7 +173,7 @@ class ShowRawfile extends React.Component {
 
     patchTrainingId(trainingId) {
         const id = this.state.rawfile.id;
-        const data = new FormData();
+        const data = new URLSearchParams();
         var rawfile = this.state.rawfile;
 
         rawfile.training_id = trainingId;
@@ -184,9 +184,7 @@ class ShowRawfile extends React.Component {
 
         const csrfToken = document.querySelector('[name=csrf-token]').content;
         axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
-        axios.patch(`/api/v1/rawfiles/${id}`, data, {
-            // receive two    parameter endpoint url ,form data
-        }).then(response => {
+        axios.patch(`/api/v1/rawfiles/${id}`, data, {}).then(response => {
             this.state.rawfile = response.data;
             this.setState(this.state);
         })
