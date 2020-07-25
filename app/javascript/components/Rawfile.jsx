@@ -329,7 +329,6 @@ class ActivityDescription extends React.Component {
 class SessionDescription extends React.Component {
     render() {
         const { session } = this.props;
-        console.log(session);
         return (<Descriptions title="Session">
                 <Descriptions.Item label="Tidpunkt (UTC)">{toDateTime(session.timestamp)}</Descriptions.Item>
                 <Descriptions.Item label="Starttid (UTC)">{toDateTime(session.start_time)}</Descriptions.Item>
@@ -461,7 +460,7 @@ class UploadRawfile extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedFile: null
+            selectedFiles: null
         };
         this.onChangeHandler = this.onChangeHandler.bind(this);
         this.onClickHandler = this.onClickHandler.bind(this);
@@ -469,28 +468,36 @@ class UploadRawfile extends React.Component {
 
     render() {
         return (<div>
-                <input type="file" name="file" onChange={this.onChangeHandler} />
+                <input type="file" name="file" onChange={this.onChangeHandler} multiple />
                 <button type="button" onClick={this.onClickHandler}>Upload</button>
                 </div>);
     }
 
     onChangeHandler(event) {
         this.setState({
-            selectedFile: event.target.files[0],
+            selectedFiles: event.target.files,
             loaded: 0,
         });
     }
 
     onClickHandler() {
         const data = new FormData();
-        data.append('file', this.state.selectedFile);
-        data.append('last_modified', this.state.selectedFile.lastModified);
+        const files = this.state.selectedFiles;
+        for (var i = 0; i < files.length; i++) {
+            data.append('files[][file]', files[i]);
+            data.append('files[][last_modified]', files[i].lastModified);
+        }
+
         const csrfToken = document.querySelector('[name=csrf-token]').content;
         axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
-        axios.post("/api/v1/rawfiles/upload", data, {
-            // receive two    parameter endpoint url ,form data
-        }).then(res => { // then print response status
-            window.location.href = `/rawfiles/${res.data.id}`;
+        axios.post("/api/v1/rawfiles/upload", data, {}).then(response => {
+            const rawfiles = response.data.rawfiles;
+
+            if (rawfiles.length == 1) {
+                window.location.href = `/rawfiles/${rawfiles[0].id}`;
+            } else {
+                window.location.href = `/rawfiles`;
+            }
         })
     }  
 }
@@ -564,6 +571,9 @@ class IndexRawfiles extends React.Component {
                   </Col>
                   <Col xs={5} sm={3} md={3} lg={2} xl={2}>
                     {rawfile.size}
+                  </Col>
+                  <Col xs={5} sm={3} md={3} lg={2} xl={2}>
+                    {rawfile.training_id}
                   </Col>
                 </Row>
               </Link>
