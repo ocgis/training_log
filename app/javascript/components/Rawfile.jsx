@@ -228,6 +228,64 @@ function toDateTime(ts) {
     return new Date(ts*1000).toISOString();
 }
 
+function toSport(s) {
+    const intToStr = {
+        0: 'generic',
+        1: 'running',
+        2: 'cycling',
+        5: 'swimming',
+        11: 'walking'
+    };
+
+    if (s in intToStr) {
+        return intToStr[s];
+    } else {
+        return s;
+    }
+}
+
+function toEvent(e) {
+    const intToStr = {
+        0: 'timer',
+        9: 'lap'
+    };
+
+    if (e in intToStr) {
+        return intToStr[e];
+    } else {
+        return e;
+    }
+}
+
+function toEventType(e) {
+    const intToStr = {
+        0: 'start',
+        1: 'stop',
+        3: 'marker',
+        4: 'stop_all'
+    };
+
+    if (e in intToStr) {
+        return intToStr[e];
+    } else {
+        return e;
+    }
+}
+
+function toLapTrigger(t) {
+    const intToStr = {
+        0: 'manual',
+        2: 'distance',
+        7: 'session_end'
+    };
+
+    if (t in intToStr) {
+        return intToStr[t];
+    } else {
+        return t;
+    }
+}
+
 class ShowFitfile extends React.Component {
     render() {
         const { fitfile } = this.props;
@@ -271,9 +329,11 @@ class ActivityDescription extends React.Component {
 class SessionDescription extends React.Component {
     render() {
         const { session } = this.props;
+        console.log(session);
         return (<Descriptions title="Session">
                 <Descriptions.Item label="Tidpunkt (UTC)">{toDateTime(session.timestamp)}</Descriptions.Item>
                 <Descriptions.Item label="Starttid (UTC)">{toDateTime(session.start_time)}</Descriptions.Item>
+                <Descriptions.Item label="Sport">{toSport(session.sport)}</Descriptions.Item>
                 <Descriptions.Item label="Total tid (timer)">{toHHMMSS(session.total_timer_time)}</Descriptions.Item>
                 <Descriptions.Item label="Total tid (elapsed)">{toHHMMSS(session.total_elapsed_time)}</Descriptions.Item>
                 <Descriptions.Item label="Total sträcka">{session.total_distance + " m"}</Descriptions.Item>
@@ -300,6 +360,21 @@ class LapsTable extends React.Component {
                 title: 'Starttid',
                 dataIndex: 'start_time',
                 render: t => toDateTime(t)
+            },
+            {
+                title: 'Event',
+                dataIndex: 'event',
+                render: e => toEvent(e)
+            },
+            {
+                title: 'Event type',
+                dataIndex: 'event_type',
+                render: e => toEventType(e)
+            },
+            {
+                title: 'Lap trigger',
+                dataIndex: 'lap_trigger',
+                render: t => toLapTrigger(t)
             },
             {
                 title: 'Tid',
@@ -359,7 +434,8 @@ class EventsTable extends React.Component {
             },
             {
                 title: 'event',
-                dataIndex: 'event'
+                dataIndex: 'event',
+                render: e => toEvent(e)
             },
             {
                 title: 'event_group',
@@ -367,7 +443,8 @@ class EventsTable extends React.Component {
             },
             {
                 title: 'event_type',
-                dataIndex: 'event_type'
+                dataIndex: 'event_type',
+                render: e => toEventType(e)
             },
             {
                 title: 'data',
