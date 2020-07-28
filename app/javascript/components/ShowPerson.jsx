@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import 'antd/dist/antd.css';
 import { Col, Row } from 'antd';
 import { TrainingsList } from "./Training";
+import TopMenu from "./TopMenu";
 
 
 class ShowPerson extends React.Component {
@@ -44,6 +45,7 @@ class ShowPerson extends React.Component {
         if (person !== null) {
             return (
                 <div>
+                  <TopMenu />
                   <h1>{person.name}</h1>
                   <TrainingsList trainings={person.trainings} />
                   <Link to={"/people/"+id+"/edit"}>

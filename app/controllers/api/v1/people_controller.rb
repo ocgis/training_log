@@ -79,6 +79,16 @@ class Api::V1::PeopleController < ApplicationController
     end
   end
 
+
+  def current_person
+    if current_user.people.size == 0
+      render json: nil
+    else
+      render json: current_user.people[0].id
+    end
+  end
+
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_person

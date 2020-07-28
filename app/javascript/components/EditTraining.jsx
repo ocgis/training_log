@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import TrainingForm from "./TrainingForm";
+import TopMenu from "./TopMenu";
 
 class EditTraining extends React.Component {
     constructor(props) {
@@ -42,11 +43,17 @@ class EditTraining extends React.Component {
         if (training !== null) {
             return (
                 <div>
+                  <TopMenu />
                   <TrainingForm training={training} afterSubmit={this.afterSubmit} />
                 </div>
             );
         } else {
-            return (<h1>Loading...</h1>);
+            return (
+                <div>
+                  <TopMenu />
+                  <h1>Loading...</h1>
+                </div>
+            );
         }
     }
 

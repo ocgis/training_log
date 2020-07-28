@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Route } from "./Route";
 import { Rawfile } from "./Rawfile";
+import TopMenu from "./TopMenu";
 
 class Training extends React.Component {
     constructor(props) {
@@ -42,6 +43,7 @@ class Training extends React.Component {
         if (training !== null) {
             return (
                 <div>
+                  <TopMenu />
                   {training.date_yyyy_mm_dd}
                   {" "}
                   {training.kind}
@@ -70,7 +72,12 @@ class Training extends React.Component {
                 </div>
             );
         } else {
-            return (<h1>Loading</h1>);
+            return (
+                <div>
+                  <TopMenu />
+                  <h1>Loading</h1>
+                </div>
+            );
         }
     }
 

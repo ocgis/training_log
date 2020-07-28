@@ -34,7 +34,7 @@ class Ability
     user ||= User.new # guest user (not logged in)
 
     if user.has_role? :admin
-      can [:index, :show, :edit, :update, :new, :create], Person
+      can [:index, :show, :edit, :update, :new, :create, :current_person], Person
       can [:show, :edit, :update, :new, :create, :upload, :search], Training
       can [:index, :show], Route
       can [:index, :show, :update, :upload], Rawfile

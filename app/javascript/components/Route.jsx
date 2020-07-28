@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Map, Marker, Polyline, Popup, TileLayer } from 'react-leaflet';
-import { TrainingsList } from './Training';
+import { Map, Marker, Polyline, Popup, TileLayer } from "react-leaflet";
+import { TrainingsList } from "./Training";
+import TopMenu from "./TopMenu";
 
 //const position = [51.505, -0.09]
 
@@ -47,12 +48,18 @@ class ShowRoute extends React.Component {
             var polyline = route.route_points.map(p => [p.latitude, p.longitude]);
             return (
                 <div>
+                  <TopMenu />
                   <Route route={route} />
                   <TrainingsList trainings={route.trainings} />
                 </div>
             );
         } else {
-            return (<h1>Loading</h1>);
+            return (
+                <div>
+                  <TopMenu />
+                  <h1>Loading</h1>
+                </div>
+            );
         }
     }
 }

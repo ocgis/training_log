@@ -1,10 +1,11 @@
 import React from "react";
-import axios from 'axios';
+import axios from "axios";
 import { Link } from "react-router-dom";
-import { Map, Marker, Polyline, Popup, TileLayer } from 'react-leaflet';
-import { Descriptions, Table, Col, Row, Button } from 'antd';
+import { Map, Marker, Polyline, Popup, TileLayer } from "react-leaflet";
+import { Descriptions, Table, Col, Row, Button } from "antd";
 import { TrainingsListItem } from "./Training";
 import TrainingForm from "./TrainingForm";
+import TopMenu from "./TopMenu";
 
 class ShowRawfile extends React.Component {
 
@@ -60,12 +61,20 @@ class ShowRawfile extends React.Component {
 
         if (rawfile !== null) {
             // FIXME: TrainingInfo should probably go in ShowFitfile
-            return (<div>
-                    {this.trainingInfo()}
-                    <Rawfile rawfile={rawfile} />
-                    </div>);
+            return (
+                <div>
+                  <TopMenu />
+                  {this.trainingInfo()}
+                  <Rawfile rawfile={rawfile} />
+                </div>
+            );
         } else {
-            return (<h1>Loading</h1>);
+            return (
+                <div>
+                  <TopMenu />
+                  <h1>Loading</h1>
+                </div>
+            );
         }
     }
 
@@ -74,14 +83,18 @@ class ShowRawfile extends React.Component {
         const training = this.state.rawfile.training;
 
         if (training == null) {
-            return (<React.Fragment>
-                    {this.suggestTrainings()}
-                    </React.Fragment>);
+            return (
+                <React.Fragment>
+                  {this.suggestTrainings()}
+                </React.Fragment>
+            );
         } else {
-            return (<div>
-                    <TrainingsListItem key="1" training={training} />
-                    <Button onClick={this.connectTrainingHandler} data-id={null}>Detach training</Button>
-                    </div>);
+            return (
+                <div>
+                  <TrainingsListItem key="1" training={training} />
+                  <Button onClick={this.connectTrainingHandler} data-id={null}>Detach training</Button>
+                </div>
+            );
         }
     }
 
@@ -90,7 +103,9 @@ class ShowRawfile extends React.Component {
         const date = toDateTime(this.state.rawfile.fitfile.activities[0].local_timestamp);
 
         if (this.state.suggestedTrainings == null) {
-            return (<h3>Loading</h3>);
+            return (
+                <h3>Loading</h3>
+            );
         } else {
             if (this.state.createNewTraining) {
                 const rawfile = this.state.rawfile;
@@ -110,10 +125,12 @@ class ShowRawfile extends React.Component {
                                                              duration_hh_mm_ss: toHHMMSS(lap.total_timer_time),
                                                              distance_m: lap.total_distance }))
                 };
-                return (<div>
-                        <TrainingForm training={training} afterSubmit={this.afterSubmitTraining} />
-                        {this.cancelNewTrainingButton()}
-                        </div>);
+                return (
+                    <div>
+                      <TrainingForm training={training} afterSubmit={this.afterSubmitTraining} />
+                      {this.cancelNewTrainingButton()}
+                    </div>
+                );
             } else if (this.state.suggestedTrainings.length == 0) {
                 return this.createNewTrainingButton();
             } else {
@@ -136,10 +153,12 @@ class ShowRawfile extends React.Component {
                         render: id => (<Button onClick={this.connectTrainingHandler} data-id={id}>Attach</Button>)
                     }
                 ];
-                return (<React.Fragment>
-                        {this.createNewTrainingButton()}
-                        <Table columns={columns} dataSource={this.state.suggestedTrainings} rowKey="id" />
-                        </React.Fragment>);
+                return (
+                    <React.Fragment>
+                      {this.createNewTrainingButton()}
+                      <Table columns={columns} dataSource={this.state.suggestedTrainings} rowKey="id" />
+                    </React.Fragment>
+                );
             }
         }
     }
@@ -148,16 +167,21 @@ class ShowRawfile extends React.Component {
     createNewTrainingButton() {
         const _this = this;
 
-        return (<Button onClick={ () => { _this.state.createNewTraining = true;
-                                          _this.setState(_this.state); } }>Create new training</Button>);
+        return (
+            <Button onClick={ () => { _this.state.createNewTraining = true;
+              _this.setState(_this.state); } }>Create new training</Button>
+        );
     }
 
 
     cancelNewTrainingButton() {
         const _this = this;
 
-        return (<Button onClick={ () => { _this.state.createNewTraining = false;
-                                          _this.setState(_this.state); } }>Cancel</Button>);
+        return (
+            <Button onClick={ () => { _this.state.createNewTraining = false;
+                                      _this.setState(_this.state); }
+              }>Cancel</Button>
+        );
     }
 
     connectTrainingHandler(event) {
@@ -195,14 +219,16 @@ class ShowRawfile extends React.Component {
 class Rawfile extends React.Component {
     render() {
         const { rawfile } = this.props;
-        return (<div>
-                {rawfile.orig_filename}
-                <br />
-                {rawfile.content_type}
-                <br />
-                {rawfile.size}
-                <ShowFitfile fitfile={rawfile.fitfile} />
-                </div>);
+        return (
+            <div>
+              {rawfile.orig_filename}
+              <br />
+              {rawfile.content_type}
+              <br />
+              {rawfile.size}
+              <ShowFitfile fitfile={rawfile.fitfile} />
+            </div>
+        );
     }
 }
 
@@ -291,22 +317,24 @@ class ShowFitfile extends React.Component {
         const { fitfile } = this.props;
         var polyline = fitfile.records.flatMap(p => p.position_lat === undefined ? [] : [[p.position_lat, p.position_long]]);
         var date = new Date(fitfile.activities[0].timestamp*1000).toISOString();
-        return (<div>
-                <Map center={polyline[0]} zoom={13}>
+        return (
+            <div>
+              <Map center={polyline[0]} zoom={13}>
                 <TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
-                />
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
+                  />
                 <Marker position={polyline[0]}>
-                <Popup>Start</Popup>
+                  <Popup>Start</Popup>
                 </Marker>
                 <Polyline positions={polyline} />
-                </Map>
-                <ActivityDescription activity={fitfile.activities[0]} />
-                <SessionDescription session={fitfile.sessions[0]} />
-                <LapsTable laps={fitfile.laps} />
-                <EventsTable events={fitfile.events} />
-                </div>);   
+              </Map>
+              <ActivityDescription activity={fitfile.activities[0]} />
+              <SessionDescription session={fitfile.sessions[0]} />
+              <LapsTable laps={fitfile.laps} />
+              <EventsTable events={fitfile.events} />
+            </div>
+        );
     }
 }
 
@@ -314,14 +342,16 @@ class ShowFitfile extends React.Component {
 class ActivityDescription extends React.Component {
     render() {
         const { activity } = this.props;
-        return (<Descriptions title="Aktivitet">
-                <Descriptions.Item label="Tidpunkt (lokal)">{toDateTime(activity.local_timestamp)}</Descriptions.Item>
-                <Descriptions.Item label="Tidpunkt (UTC)">{toDateTime(activity.timestamp)}</Descriptions.Item>
-                <Descriptions.Item label="Total tid (timer)">{toHHMMSS(activity.total_timer_time)}</Descriptions.Item>
-                <Descriptions.Item label="event">{activity.event}</Descriptions.Item>
-                <Descriptions.Item label="event_type">{activity.event_type}</Descriptions.Item>
-                <Descriptions.Item label="type">{activity.type}</Descriptions.Item>
-                </Descriptions>);
+        return (
+            <Descriptions title="Aktivitet">
+              <Descriptions.Item label="Tidpunkt (lokal)">{toDateTime(activity.local_timestamp)}</Descriptions.Item>
+              <Descriptions.Item label="Tidpunkt (UTC)">{toDateTime(activity.timestamp)}</Descriptions.Item>
+              <Descriptions.Item label="Total tid (timer)">{toHHMMSS(activity.total_timer_time)}</Descriptions.Item>
+              <Descriptions.Item label="event">{activity.event}</Descriptions.Item>
+              <Descriptions.Item label="event_type">{activity.event_type}</Descriptions.Item>
+              <Descriptions.Item label="type">{activity.type}</Descriptions.Item>
+            </Descriptions>
+        );
     }
 }
 
@@ -329,25 +359,27 @@ class ActivityDescription extends React.Component {
 class SessionDescription extends React.Component {
     render() {
         const { session } = this.props;
-        return (<Descriptions title="Session">
-                <Descriptions.Item label="Tidpunkt (UTC)">{toDateTime(session.timestamp)}</Descriptions.Item>
-                <Descriptions.Item label="Starttid (UTC)">{toDateTime(session.start_time)}</Descriptions.Item>
-                <Descriptions.Item label="Sport">{toSport(session.sport)}</Descriptions.Item>
-                <Descriptions.Item label="Total tid (timer)">{toHHMMSS(session.total_timer_time)}</Descriptions.Item>
-                <Descriptions.Item label="Total tid (elapsed)">{toHHMMSS(session.total_elapsed_time)}</Descriptions.Item>
-                <Descriptions.Item label="Total sträcka">{session.total_distance + " m"}</Descriptions.Item>
-                <Descriptions.Item label="Medelfart">{toSpeed(session.avg_speed)}</Descriptions.Item>
-                <Descriptions.Item label="Maxfart">{toSpeed(session.max_speed)}</Descriptions.Item>
-                <Descriptions.Item label="Antal steg">{session.total_cycles*2.0}</Descriptions.Item>
-                <Descriptions.Item label="Medelkadens">{session.avg_cadence*2.0}</Descriptions.Item>
-                <Descriptions.Item label="Maxkadens">{session.max_cadence*2.0}</Descriptions.Item>
-                <Descriptions.Item label="Medelpuls">{session.avg_heart_rate}</Descriptions.Item>
-                <Descriptions.Item label="Maxpuls">{session.max_heart_rate}</Descriptions.Item>
-                <Descriptions.Item label="Uppstigning">{session.total_ascent}</Descriptions.Item>
-                <Descriptions.Item label="Nedstigning">{session.total_descent}</Descriptions.Item>
-                <Descriptions.Item label="Energiförbrukning">{session.total_calories + " kcal"}</Descriptions.Item>
-                <Descriptions.Item label="Intensitet">{session.total_training_effect}</Descriptions.Item>
-                </Descriptions>);
+        return (
+            <Descriptions title="Session">
+              <Descriptions.Item label="Tidpunkt (UTC)">{toDateTime(session.timestamp)}</Descriptions.Item>
+              <Descriptions.Item label="Starttid (UTC)">{toDateTime(session.start_time)}</Descriptions.Item>
+              <Descriptions.Item label="Sport">{toSport(session.sport)}</Descriptions.Item>
+              <Descriptions.Item label="Total tid (timer)">{toHHMMSS(session.total_timer_time)}</Descriptions.Item>
+              <Descriptions.Item label="Total tid (elapsed)">{toHHMMSS(session.total_elapsed_time)}</Descriptions.Item>
+              <Descriptions.Item label="Total sträcka">{session.total_distance + " m"}</Descriptions.Item>
+              <Descriptions.Item label="Medelfart">{toSpeed(session.avg_speed)}</Descriptions.Item>
+              <Descriptions.Item label="Maxfart">{toSpeed(session.max_speed)}</Descriptions.Item>
+              <Descriptions.Item label="Antal steg">{session.total_cycles*2.0}</Descriptions.Item>
+              <Descriptions.Item label="Medelkadens">{session.avg_cadence*2.0}</Descriptions.Item>
+              <Descriptions.Item label="Maxkadens">{session.max_cadence*2.0}</Descriptions.Item>
+              <Descriptions.Item label="Medelpuls">{session.avg_heart_rate}</Descriptions.Item>
+              <Descriptions.Item label="Maxpuls">{session.max_heart_rate}</Descriptions.Item>
+              <Descriptions.Item label="Uppstigning">{session.total_ascent}</Descriptions.Item>
+              <Descriptions.Item label="Nedstigning">{session.total_descent}</Descriptions.Item>
+              <Descriptions.Item label="Energiförbrukning">{session.total_calories + " kcal"}</Descriptions.Item>
+              <Descriptions.Item label="Intensitet">{session.total_training_effect}</Descriptions.Item>
+            </Descriptions>
+        );
     }
 }
 
@@ -417,7 +449,9 @@ class LapsTable extends React.Component {
                 dataIndex: 'max_heart_rate'
             },
         ];
-        return (<Table columns={columns} dataSource={laps} rowKey="timestamp" />);
+        return (
+            <Table columns={columns} dataSource={laps} rowKey="timestamp" />
+        );
     }
 }
 
@@ -450,7 +484,9 @@ class EventsTable extends React.Component {
                 dataIndex: 'data'
             }
         ];
-        return (<Table columns={columns} dataSource={events} rowKey="timestamp" />);
+        return (
+            <Table columns={columns} dataSource={events} rowKey="timestamp" />
+        );
     }
 }
 
@@ -467,10 +503,13 @@ class UploadRawfile extends React.Component {
     }
 
     render() {
-        return (<div>
-                <input type="file" name="file" onChange={this.onChangeHandler} multiple />
-                <button type="button" onClick={this.onClickHandler}>Upload</button>
-                </div>);
+        return (
+            <div>
+              <TopMenu />
+              <input type="file" name="file" onChange={this.onChangeHandler} multiple />
+              <button type="button" onClick={this.onClickHandler}>Upload</button>
+            </div>
+        );
     }
 
     onChangeHandler(event) {
@@ -531,12 +570,18 @@ class IndexRawfiles extends React.Component {
         if (rawfiles !== null) {
             return (
                 <div>
+                  <TopMenu />
                   <h1>Uploaded files</h1>
                   {this.renderRawfiles(rawfiles)}
                 </div>
             );
         } else {
-            return (<h1>Loading</h1>);
+            return (
+                <div>
+                  <TopMenu />
+                  <h1>Loading</h1>
+                </div>
+            );
         }
     }
 

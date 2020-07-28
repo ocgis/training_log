@@ -13,7 +13,11 @@ Rails.application.routes.draw do
           post :upload
         end
       end
-      resources :people
+      resources :people do
+        collection do
+          get :current_person
+        end
+      end
       resources :routes
     end
   end

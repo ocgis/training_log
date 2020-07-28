@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import 'antd/dist/antd.css';
-import { Col, Row } from 'antd';
+import "antd/dist/antd.css";
+import { Col, Row } from "antd";
+import TopMenu from "./TopMenu";
 
 class ShowRoutes extends React.Component {
     constructor(props) {
@@ -31,12 +32,18 @@ class ShowRoutes extends React.Component {
         if (routes !== null) {
             return (
                 <div>
+                  <TopMenu />
                   <h1>Routes</h1>
                   {this.renderRoutes(routes)}
                 </div>
             );
         } else {
-            return (<h1>Loading</h1>);
+            return (
+                <div>
+                  <TopMenu />
+                  <h1>Loading</h1>
+                </div>
+            );
         }
     }
 
