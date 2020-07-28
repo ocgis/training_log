@@ -1,32 +1,51 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Menu } from "antd";
+import {
+  MenuUnfoldOutlined,
+  MenuFoldOutlined,
+} from "@ant-design/icons";
 
 class TopMenu extends React.Component {
     render() {
         return (
-            <div>
-              <Link to={"/"}>
-                Overview
-              </Link>
-              <Link to={"/trainings/new"}>
-                New training
-              </Link>
-              <Link to={"/rawfiles"}>
-                Uploaded files
-              </Link>
-              <Link to={"/rawfiles/new"}>
-                Upload file
-              </Link>
-              <Link to={"/routes"}>
-                Routes
-              </Link>
-              <a href={"/users/edit"}>
-                Edit registration
-              </a>
-              <a href={"/users/sign_out"} data-method="delete">
-                Logout
-              </a>
-            </div>
+            <Menu mode="horizontal">
+              <Menu.Item>
+                <Link to={"/"}>
+                  Overview
+                </Link>
+              </Menu.Item>
+              <Menu.Item>
+                <Link to={"/trainings/new"}>
+                  New training
+                </Link>
+              </Menu.Item>
+              <Menu.Item>
+                <Link to={"/rawfiles"}>
+                  Uploaded files
+                </Link>
+              </Menu.Item>
+              <Menu.Item>
+                <Link to={"/rawfiles/new"}>
+                  Upload file
+                </Link>
+              </Menu.Item>
+              <Menu.Item>
+                <Link to={"/routes"}>
+                  Routes
+                </Link>
+              </Menu.Item>
+              <Menu.Item>
+                <a href={"/users/edit"}>
+                  Edit registration
+                </a>
+              </Menu.Item>
+              <Menu.Item>
+                <a href={"/users/sign_out"} data-method="delete">
+                  Logout
+                </a>
+              </Menu.Item>
+            </Menu>
         );
     }
 }
