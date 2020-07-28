@@ -54,7 +54,12 @@ class ShowPerson extends React.Component {
                 </div>
             );
         } else {
-            return (<h1>Loading</h1>);
+            return (
+                <div>
+                  <TopMenu />
+                  <h1>Loading</h1>
+                </div>
+            );
         }
     }
 
