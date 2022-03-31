@@ -148,7 +148,8 @@ GEM
       oauth2 (~> 1.1)
       omniauth (~> 1.9)
     orm_adapter (0.5.0)
-    puma (3.12.6)
+    puma (4.3.12)
+      nio4r (~> 2.0)
     rack (2.2.3)
     rack-proxy (0.6.5)
       rack
@@ -263,7 +264,7 @@ DEPENDENCIES
   listen (~> 3.0.5)
   mysql2
   omniauth-facebook
-  puma (~> 3.12)
+  puma (~> 4.3)
   rails (>= 5.2.4.3)
   react-rails
   role_model
