@@ -1,32 +1,31 @@
-import React from "react";
+import React from 'react';
+import PropTypes from 'prop-types';
 import axios from 'axios';
-import { Link } from "react-router-dom";
-
 
 class Home extends React.Component {
-    constructor(props) {
-        super(props);
-    }
+  componentDidMount() {
+    const { history } = this.props;
+    const csrfToken = document.querySelector('[name=csrf-token]').content;
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
 
-    componentDidMount() {
-        const csrfToken = document.querySelector('[name=csrf-token]').content;
-        axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
+    axios
+      .get('/api/v1/people/current_person')
+      .then((response) => {
+        const current_person = response.data;
+        if (current_person == null) {
+          history.push('/people/new');
+        } else {
+          history.push(`/people/${current_person}`);
+        }
+      });
+  }
 
-        axios.get('/api/v1/people/current_person')
-            .then(response => {
-                const current_person = response.data;
-                if (current_person == null) {
-                    this.props.history.push('/people/new');
-                } else {
-                    this.props.history.push(`/people/${current_person}`);
-                }
-            });
-    }
-
-
-    render () {
-        return (<div></div>);
-    }
+  render() {
+    return (<div />);
+  }
 }
+Home.propTypes = {
+  history: PropTypes.shape().isRequired,
+};
 
 export default Home;
