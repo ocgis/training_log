@@ -6,7 +6,7 @@ import ShowTraining from '../components/ShowTraining';
 import NewTraining from '../components/NewTraining';
 import EditTraining from '../components/EditTraining';
 import IndexRoutes from '../components/IndexRoutes';
-import { ShowRoute } from '../components/Route';
+import ShowRoute from '../components/ShowRoute';
 import IndexRawfiles from '../components/IndexRawfiles';
 import ShowRawfile from '../components/ShowRawfile';
 import UploadRawfile from '../components/UploadRawfile';
