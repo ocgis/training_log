@@ -1,5 +1,5 @@
 # config valid for current version and patch releases of Capistrano
-lock "~> 3.12.1"
+lock "~> 3.17.0"
 
 set :application, "training_log"
 set :repo_url, "git@github.com:ocgis/training_log.git"
