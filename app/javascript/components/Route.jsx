@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import {
-  Map, Marker, Polyline, Popup, TileLayer,
+  MapContainer, Marker, Polyline, Popup, TileLayer,
 } from 'react-leaflet';
 
 function Route(props) {
@@ -27,7 +27,7 @@ function Route(props) {
           Edit
         </Link>
       </div>
-      <Map center={startPosition} zoom={13}>
+      <MapContainer center={startPosition} zoom={13}>
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
@@ -36,7 +36,7 @@ function Route(props) {
           <Popup>Start</Popup>
         </Marker>
         <Polyline positions={polyline} />
-      </Map>
+      </MapContainer>
     </div>
   );
 }
