@@ -41,7 +41,10 @@ function Route(props) {
   );
 }
 Route.propTypes = {
-  route: PropTypes.shape().isRequired,
+  route: PropTypes.shape(),
+};
+Route.defaultProps = {
+  route: null,
 };
 
 export default Route;
