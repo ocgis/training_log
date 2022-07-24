@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import {
-  MapContainer, Marker, Polyline, Popup, TileLayer,
+  Map, Marker, Polyline, Popup, TileLayer,
 } from 'react-leaflet';
 
 function Route(props) {
