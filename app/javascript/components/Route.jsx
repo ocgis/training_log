@@ -27,7 +27,7 @@ function Route(props) {
           Edit
         </Link>
       </div>
-      <MapContainer center={startPosition} zoom={13}>
+      <Map center={startPosition} zoom={13}>
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
@@ -36,7 +36,7 @@ function Route(props) {
           <Popup>Start</Popup>
         </Marker>
         <Polyline positions={polyline} />
-      </MapContainer>
+      </Map>
     </div>
   );
 }
