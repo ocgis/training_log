@@ -27,7 +27,11 @@ function Route(props) {
           Edit
         </Link>
       </div>
-      <Map center={startPosition} zoom={13}>
+      <Map
+        center={startPosition}
+        zoom={13}
+        scrollWheelZoom={false}
+      >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"

@@ -243,7 +243,11 @@ function ShowFitfile(props) {
   // Remove? const date = new Date(fitfile.activities[0].timestamp * 1000).toISOString();
   return (
     <div>
-      <Map center={polyline[0]} zoom={13}>
+      <Map
+        center={polyline[0]}
+        zoom={13}
+        scrollWheelZoom={false}
+      >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
