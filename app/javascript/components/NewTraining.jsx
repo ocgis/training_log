@@ -6,7 +6,6 @@ class NewTraining extends React.Component {
   constructor(props) {
     super(props);
     this.state = { training: { intervals_attributes: [] } };
-    this.afterSubmit = this.afterSubmit.bind(this);
   }
 
   render() {
