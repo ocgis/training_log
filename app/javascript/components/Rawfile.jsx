@@ -228,7 +228,7 @@ function EventsTable(props) {
     },
   ];
   return (
-    <Table columns={columns} dataSource={events} rowKey="timestamp" />
+    <Table columns={columns} dataSource={events} rowKey={(record) => `${record.timestamp}_${record.event}`} />
   );
 }
 EventsTable.propTypes = {
