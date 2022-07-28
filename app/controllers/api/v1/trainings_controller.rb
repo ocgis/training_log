@@ -13,7 +13,7 @@ class Api::V1::TrainingsController < ApplicationController
 
   def show
     intervals_attributes = @training.intervals.map {
-      |interval| interval.all_attributes.except('duration_s', 'ix', 'training_id', 'created_at', 'updated_at').update({'_destroy' => 0 })
+      |interval| interval.all_attributes.except('ix', 'training_id', 'created_at', 'updated_at').update({'_destroy' => 0 })
     }
 
     training_hash = @training.all_attributes.update({intervals_attributes: intervals_attributes })
@@ -82,7 +82,7 @@ class Api::V1::TrainingsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def training_params
-      params.require(:training).permit(:kind, :date, :description, :duration_hh_mm_ss, :distance_m, :max_pulse_bpm, :avg_pulse_bpm, :energy_kcal, :intensity, :altid, :route_id, :person_id, intervals_attributes: [:id, :duration_hh_mm_ss, :distance_m, :comment, :_destroy])
+      params.require(:training).permit(:kind, :date, :description, :duration_s, :distance_m, :max_pulse_bpm, :avg_pulse_bpm, :energy_kcal, :intensity, :altid, :route_id, :person_id, intervals_attributes: [:id, :duration_s, :distance_m, :comment, :_destroy])
     end
 
     # FIXME: Duplicated in rawfiles_controller

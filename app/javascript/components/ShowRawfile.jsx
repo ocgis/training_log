@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import { Table, Button } from 'antd';
 import { TrainingsListItem } from './Training';
-import { Rawfile, toDateTime, toHHMMSS } from './Rawfile';
+import { Rawfile, toDateTime } from './Rawfile';
+import { toHHMMSS } from './Conversions';
 import TrainingForm from './TrainingForm';
 import TopMenu from './TopMenu';
 
@@ -70,7 +71,7 @@ class ShowRawfile extends React.Component {
       const training = {
         kind: 'Löpning', // FIXME
         date: toDateTime(activity.local_timestamp),
-        duration_hh_mm_ss: toHHMMSS(activity.total_timer_time),
+        duration_s: activity.total_timer_time,
         distance_m: session.total_distance,
         max_pulse_bpm: session.max_heart_rate,
         avg_pulse_bpm: session.avg_heart_rate,
@@ -78,7 +79,7 @@ class ShowRawfile extends React.Component {
         intensity: session.total_training_effect,
         intervals_attributes: laps.map((lap) => ({
           _destroy: false,
-          duration_hh_mm_ss: toHHMMSS(lap.total_timer_time),
+          duration_s: lap.total_timer_time,
           distance_m: lap.total_distance,
         })),
       };
@@ -105,7 +106,7 @@ class ShowRawfile extends React.Component {
       },
       {
         title: 'Duration',
-        dataIndex: 'duration_hh_mm_ss',
+        dataIndex: 'durationHHMMSS',
       },
       {
         title: 'Create',

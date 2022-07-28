@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Route from './Route';
 import { Rawfile } from './Rawfile';
+import {
+  distanceDurationToSpeed, toHHMMSS, toKm, toYYYYMMDD,
+} from './Conversions';
 import TopMenu from './TopMenu';
 
 class Training extends React.Component {
@@ -16,7 +19,6 @@ class Training extends React.Component {
       match: {
         params: { id },
       },
-      history,
     } = this.props;
 
     const url = `/api/v1/trainings/${id}`;
@@ -31,7 +33,7 @@ class Training extends React.Component {
       .then((response) => {
         this.setState({ training: response });
       })
-      .catch(() => history.push('/'));
+      .catch((error) => console.log(error));
   }
 
   render() {
@@ -84,10 +86,9 @@ class Training extends React.Component {
     const renderIntervals = (intervals) => {
       const renderInterval = (interval, index) => (
         <tr key={index}>
-          <th>{interval.duration_hh_mm_ss}</th>
-          <th>{interval.distance_km}</th>
-          <th>{interval.pace_min_km}</th>
-          <th>{interval.speed_km_h}</th>
+          <th>{toHHMMSS(interval.duration_s)}</th>
+          <th>{toKm(interval.distance_m)}</th>
+          <th>{distanceDurationToSpeed(interval.distance_m, interval.duration_s)}</th>
           <th>{interval.comment}</th>
         </tr>
       );
@@ -101,7 +102,6 @@ class Training extends React.Component {
                 <tr>
                   <th>Tid</th>
                   <th>Sträcka</th>
-                  <th>Tempo</th>
                   <th>Hastighet</th>
                   <th>Kommentar</th>
                 </tr>
@@ -129,13 +129,15 @@ class Training extends React.Component {
       return (
         <div>
           <TopMenu />
-          {training.date_yyyy_mm_dd}
+          {toYYYYMMDD(training.date)}
           {' '}
           {training.kind}
           {' '}
-          {training.duration_hh_mm_ss}
+          {toHHMMSS(training.duration_s)}
           {' '}
-          {training.distance_km}
+          {toKm(training.distance_m)}
+          {' '}
+          {distanceDurationToSpeed(training.distance_m, training.duration_s)}
           {renderDescription(training)}
           {renderRoute(training)}
           {renderField('Maxpuls:', training.max_pulse_bpm, 'slag/min')}
@@ -165,7 +167,6 @@ class Training extends React.Component {
 }
 Training.propTypes = {
   match: PropTypes.shape().isRequired,
-  history: PropTypes.shape().isRequired,
 };
 
 export default Training;

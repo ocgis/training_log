@@ -4,25 +4,7 @@ import {
   Map, Marker, Polyline, Popup, TileLayer,
 } from 'react-leaflet';
 import { Descriptions, Table } from 'antd';
-
-function toHHMMSS(seconds) {
-  const hour = Math.floor(seconds / 60 / 60).toString().padStart(2, '0');
-  const min = (Math.floor(seconds / 60) % 60).toString().padStart(2, '0');
-  const sec = (Math.floor(seconds) % 60).toString().padStart(2, '0');
-  return `${hour}:${min}:${sec}`;
-}
-
-function toMSS(seconds) {
-  const min = Math.floor(seconds / 60).toString();
-  const sec = (Math.floor(seconds) % 60).toString().padStart(2, '0');
-  return `${min}:${sec}`;
-}
-
-function toSpeed(mPerS) {
-  const perKm = toMSS(1000.0 / mPerS);
-  const kmPerH = (mPerS * 3.6).toFixed(1);
-  return `${perKm} /km (${kmPerH} km/h)`;
-}
+import { toHHMMSS, toSpeed } from './Conversions';
 
 function toDateTime(ts) {
   return new Date(ts * 1000).toISOString();
@@ -285,4 +267,4 @@ Rawfile.propTypes = {
   rawfile: PropTypes.shape().isRequired,
 };
 
-export { Rawfile, toDateTime, toHHMMSS };
+export { Rawfile, toDateTime };

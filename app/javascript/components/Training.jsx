@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Col, Row } from 'antd';
+import { distanceDurationToSpeed, toHHMMSS, toKm, toYYYYMMDD } from './Conversions';
 
 function Description(props) {
   const {
@@ -37,21 +38,27 @@ Description.defaultProps = {
 
 function TrainingsListItem(props) {
   const { training } = props;
+
+  const date = toYYYYMMDD(training.date);
+
   return (
     <div>
       <Link to={`/trainings/${training.id}`}>
         <Row>
           <Col xs={5} sm={3} md={3} lg={2} xl={2}>
-            {training.date_yyyy_mm_dd}
+            {date}
           </Col>
           <Col xs={5} sm={3} md={3} lg={2} xl={2}>
             {training.kind}
           </Col>
           <Col xs={5} sm={3} md={3} lg={2} xl={2}>
-            {training.duration_hh_mm_ss}
+            {toHHMMSS(training.duration_s)}
+          </Col>
+          <Col xs={5} sm={3} md={3} lg={2} xl={2}>
+            {toKm(training.distance_m)}
           </Col>
           <Col>
-            {training.distance_km}
+            {distanceDurationToSpeed(training.distance_m, training.duration_s)}
           </Col>
         </Row>
         <Description id={training.id} description={training.description} />

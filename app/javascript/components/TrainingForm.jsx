@@ -7,6 +7,7 @@ import {
   Form, DatePicker, Input, Button, Col, Row,
 } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { toHHMMSS, toS } from './Conversions';
 
 const notRequired = [{ required: false }];
 
@@ -17,11 +18,32 @@ const layout = {
 class TrainingForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = JSON.parse(JSON.stringify(this.props));
-    const { training } = this.state;
-    training.date = moment(training.date);
+
+    const mapTraining = () => {
+      const mapInterval = (interval) => {
+        const { duration_s, ...newInterval } = {
+          ...interval,
+          durationHHMMSS: toHHMMSS(interval.duration_s),
+        };
+
+        return newInterval;
+      };
+
+      const { training } = this.props;
+      const { duration_s, ...newTraining } = {
+        ...training,
+        date: moment(training.date),
+        durationHHMMSS: toHHMMSS(training.duration_s),
+        intervals_attributes: training.intervals_attributes.map(mapInterval),
+      };
+
+      return newTraining;
+    };
+
+    this.state = { training: mapTraining() };
+
     this.emptyInterval = {
-      duration_hh_mm_ss: '',
+      durationHHMMSS: '',
       distance_m: '',
       comment: '',
       _destroy: 0,
@@ -50,10 +72,10 @@ class TrainingForm extends React.Component {
         <Row key={index}>
           <Col span={7}>
             <Form.Item
-              name={['training', 'intervals_attributes', index, 'duration_hh_mm_ss']}
+              name={['training', 'intervals_attributes', index, 'durationHHMMSS']}
               rules={notRequired}
               onChange={(event) => {
-                updateInterval({ duration_hh_mm_ss: event.target.value });
+                updateInterval({ durationHHMMSS: event.target.value });
               }}
             >
               <Input placeholder="Duration" />
@@ -101,8 +123,31 @@ class TrainingForm extends React.Component {
     };
 
     const onFinish = () => {
-      const { training } = this.state;
+      const mapTraining = () => {
+        const mapInterval = (interval) => {
+          const { durationHHMMSS, ...newInterval } = {
+            ...interval,
+            duration_s: toS(interval.durationHHMMSS),
+          };
+
+          return newInterval;
+        };
+
+        const { training } = this.state;
+        const { durationHHMMSS, ...newTraining } = {
+          ...training,
+          date: moment(training.date),
+          duration_s: toS(training.durationHHMMSS),
+          intervals_attributes: training.intervals_attributes.map(mapInterval),
+        };
+
+        return newTraining;
+      };
+
+      const { training: formTraining } = this.state;
       const { afterSubmit } = this.props;
+
+      const training = mapTraining(formTraining);
 
       const csrfToken = document.querySelector('[name=csrf-token]').content;
       axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
@@ -141,11 +186,9 @@ class TrainingForm extends React.Component {
           label="Kind"
           name={['training', 'kind']}
           rules={[{ required: true, message: 'Please enter kind of training!' }]}
-          onChange={
-          (event) => {
+          onChange={(event) => {
             training.kind = event.target.value;
-          }
-          }
+          }}
         >
           <Input />
         </Form.Item>
@@ -156,21 +199,19 @@ class TrainingForm extends React.Component {
           rules={[{ required: true, message: 'Please input date of training!' }]}
         >
           <DatePicker
-            onChange={
-            (date, dateString) => {
+            onChange={(date, dateString) => {
               training.date = dateString;
-            }
-            }
+            }}
           />
         </Form.Item>
 
         <Form.Item
           label="Duration"
-          name={['training', 'duration_hh_mm_ss']}
+          name={['training', 'durationHHMMSS']}
           rules={[{ required: false }]}
           onChange={
           (event) => {
-            training.duration_hh_mm_ss = event.target.value;
+            training.durationHHMMSS = event.target.value;
           }
           }
         >
