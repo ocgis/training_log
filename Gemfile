@@ -68,3 +68,5 @@ gem 'react-rails'
 
 # FIT
 gem 'rubyfit'
+
+gem 'strscan', '= 3.0.1'
