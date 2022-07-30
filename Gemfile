@@ -8,6 +8,9 @@ gem 'sqlite3'
 gem 'mysql2'
 # Use Puma as the app server
 gem 'puma'
+
+gem 'turbo-rails'
+
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use CoffeeScript for .coffee assets and views
@@ -52,6 +55,7 @@ gem 'yaml_db'
 # Authentication
 gem 'devise'
 gem 'omniauth-facebook'
+gem 'omniauth-rails_csrf_protection'
 
 # Used for permissions
 gem 'cancancan'
