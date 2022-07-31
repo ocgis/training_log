@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200707131554) do
+ActiveRecord::Schema[6.1].define(version: 20200707131554) do
 
   create_table "intervals", force: :cascade do |t|
     t.integer  "duration_s"
