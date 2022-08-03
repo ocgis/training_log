@@ -39,21 +39,19 @@ class TopMenu extends React.Component {
           </a>
         </Menu.Item>
         <Menu.Item>
-          <Button
-            onClick={() => {
-              const csrfToken = document.querySelector('[name=csrf-token]').content;
-              axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
-              axios
-                .delete('/users/sign_out')
-                .then((response) => {
-                  this.ct_body = response.data;
-                });
-              alert('bah');
-            }}
-            style={{ border: 'none' }}
-          >
-            Logout
-          </Button>
+          <form method="post" action="/users/sign_out">
+            <input type="hidden" name="_method" value="delete" />
+            <input type="hidden" name="authenticity_token" value={document.querySelector('[name=csrf-token]').content} />
+            <input
+              data-turbo="false"
+              type="submit"
+              value="Logout"
+              style={{
+                border: 'medium none',
+                'background-color': 'inherit',
+              }}
+            />
+          </form>
         </Menu.Item>
       </Menu>
     );
