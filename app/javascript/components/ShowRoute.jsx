@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Route from './Route';
 import { TrainingsList } from './Training';
@@ -12,10 +13,8 @@ class ShowRoute extends React.Component {
 
   componentDidMount() {
     const {
-      match: {
-        params: { id },
-      },
-      history,
+      params: { id },
+      navigate,
     } = this.props;
 
     const url = `/api/v1/routes/${id}`;
@@ -30,7 +29,7 @@ class ShowRoute extends React.Component {
       .then((response) => {
         this.setState({ route: response });
       })
-      .catch(() => history.push('/'));
+      .catch(() => navigate('/'));
   }
 
   render() {
@@ -59,8 +58,15 @@ class ShowRoute extends React.Component {
   }
 }
 ShowRoute.propTypes = {
-  history: PropTypes.shape().isRequired,
-  match: PropTypes.shape().isRequired,
+  navigate: PropTypes.func.isRequired,
+  params: PropTypes.shape().isRequired,
 };
 
-export default ShowRoute;
+export default function wrapper() {
+  return (
+    <ShowRoute
+      navigate={useNavigate()}
+      params={useParams()}
+    />
+  );
+}

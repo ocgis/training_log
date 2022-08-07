@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Route from './Route';
 import { Rawfile } from './Rawfile';
 import {
@@ -8,7 +8,7 @@ import {
 } from './Conversions';
 import TopMenu from './TopMenu';
 
-class Training extends React.Component {
+class ShowTraining extends React.Component {
   constructor(props) {
     super(props);
     this.state = { training: null };
@@ -16,9 +16,7 @@ class Training extends React.Component {
 
   componentDidMount() {
     const {
-      match: {
-        params: { id },
-      },
+      params: { id },
     } = this.props;
 
     const url = `/api/v1/trainings/${id}`;
@@ -120,9 +118,7 @@ class Training extends React.Component {
 
     const { training } = this.state;
     const {
-      match: {
-        params: { id },
-      },
+      params: { id },
     } = this.props;
 
     if (training !== null) {
@@ -165,8 +161,14 @@ class Training extends React.Component {
     );
   }
 }
-Training.propTypes = {
-  match: PropTypes.shape().isRequired,
+ShowTraining.propTypes = {
+  params: PropTypes.shape().isRequired,
 };
 
-export default Training;
+export default function wrapper() {
+  return (
+    <ShowTraining
+      params={useParams()}
+    />
+  );
+}

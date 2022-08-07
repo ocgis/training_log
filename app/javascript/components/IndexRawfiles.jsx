@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Col, Row } from 'antd';
 import TopMenu from './TopMenu';
 
@@ -43,7 +43,7 @@ class IndexRawfiles extends React.Component {
   }
 
   componentDidMount() {
-    const { history } = this.props;
+    const { navigate } = this.props;
     const url = '/api/v1/rawfiles';
 
     fetch(url)
@@ -56,7 +56,7 @@ class IndexRawfiles extends React.Component {
       .then((response) => {
         this.setState({ rawfiles: response });
       })
-      .catch(() => history.push('/'));
+      .catch(() => navigate('/'));
   }
 
   render() {
@@ -80,7 +80,13 @@ class IndexRawfiles extends React.Component {
   }
 }
 IndexRawfiles.propTypes = {
-  history: PropTypes.shape().isRequired,
+  navigate: PropTypes.func.isRequired,
 };
 
-export default IndexRawfiles;
+export default function wrapper() {
+  return (
+    <IndexRawfiles
+      navigate={useNavigate()}
+    />
+  );
+}

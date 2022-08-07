@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import 'antd/dist/antd.css';
 import { Col, Row } from 'antd';
 import TopMenu from './TopMenu';
@@ -31,14 +31,14 @@ const renderRoutes = (routes) => {
   return null;
 };
 
-class ShowRoutes extends React.Component {
+class IndexRoutes extends React.Component {
   constructor(props) {
     super(props);
     this.state = { routes: null };
   }
 
   componentDidMount() {
-    const { history } = this.props;
+    const { navigate } = this.props;
     const url = '/api/v1/routes';
 
     fetch(url)
@@ -51,7 +51,7 @@ class ShowRoutes extends React.Component {
       .then((response) => {
         this.setState({ routes: response });
       })
-      .catch(() => history.push('/'));
+      .catch(() => navigate('/'));
   }
 
   render() {
@@ -74,8 +74,14 @@ class ShowRoutes extends React.Component {
     );
   }
 }
-ShowRoutes.propTypes = {
-  history: PropTypes.shape().isRequired,
+IndexRoutes.propTypes = {
+  navigate: PropTypes.func.isRequired,
 };
 
-export default ShowRoutes;
+export default function wrapper() {
+  return (
+    <IndexRoutes
+      navigate={useNavigate()}
+    />
+  );
+}

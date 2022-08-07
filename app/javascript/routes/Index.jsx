@@ -1,5 +1,7 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import {
+  BrowserRouter as Router, Route, Routes,
+} from 'react-router-dom';
 import Home from '../components/Home';
 import ShowPerson from '../components/ShowPerson';
 import ShowTraining from '../components/ShowTraining';
@@ -13,67 +15,67 @@ import UploadRawfile from '../components/UploadRawfile';
 
 export default (
   <Router>
-    <Switch>
+    <Routes>
       <Route
         path="/"
         exact
-        component={Home}
+        element={<Home />}
       />
 
       <Route
         path="/people/:id"
         exact
-        component={ShowPerson}
+        element={<ShowPerson />}
       />
 
       <Route
         path="/trainings/new"
         exact
-        component={NewTraining}
+        element={<NewTraining />}
       />
 
       <Route
         path="/trainings/:id"
         exact
-        component={ShowTraining}
+        element={<ShowTraining />}
       />
 
       <Route
         path="/trainings/:id/edit"
         exact
-        component={EditTraining}
+        element={<EditTraining />}
       />
 
       <Route
         path="/routes/:id"
         exact
-        component={ShowRoute}
+        element={<ShowRoute />}
       />
 
       <Route
         path="/routes"
         exact
-        component={IndexRoutes}
+        element={<IndexRoutes />}
       />
 
       <Route
         path="/rawfiles/new"
         exact
-        component={UploadRawfile}
+        element={<UploadRawfile />}
       />
 
       <Route
         path="/rawfiles/:id"
         exact
-        component={ShowRawfile}
+        element={<ShowRawfile />}
       />
 
       <Route
         path="/rawfiles"
         exact
-        component={IndexRawfiles}
+        element={<IndexRawfiles />}
       />
 
-    </Switch>
+    </Routes>
   </Router>
 );

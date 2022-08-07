@@ -1,10 +1,11 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
 class Home extends React.Component {
   componentDidMount() {
-    const { history } = this.props;
+    const { navigate } = this.props;
     const csrfToken = document.querySelector('[name=csrf-token]').content;
     axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
 
@@ -13,9 +14,9 @@ class Home extends React.Component {
       .then((response) => {
         const current_person = response.data;
         if (current_person == null) {
-          history.push('/people/new');
+          navigate('/people/new');
         } else {
-          history.push(`/people/${current_person}`);
+          navigate(`/people/${current_person}`);
         }
       });
   }
@@ -25,7 +26,13 @@ class Home extends React.Component {
   }
 }
 Home.propTypes = {
-  history: PropTypes.shape().isRequired,
+  navigate: PropTypes.func.isRequired,
 };
 
-export default Home;
+export default function wrapper() {
+  return (
+    <Home
+      navigate={useNavigate()}
+    />
+  );
+}

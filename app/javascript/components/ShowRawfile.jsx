@@ -1,10 +1,10 @@
 import React from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { Table, Button } from 'antd';
 import { TrainingsListItem } from './Training';
 import { Rawfile, toDateTime } from './Rawfile';
-import { toHHMMSS } from './Conversions';
 import TrainingForm from './TrainingForm';
 import TopMenu from './TopMenu';
 
@@ -22,10 +22,8 @@ class ShowRawfile extends React.Component {
 
   componentDidMount() {
     const {
-      match: {
-        params: { id },
-      },
-      history,
+      params: { id },
+      navigate,
     } = this.props;
 
     const csrfToken = document.querySelector('[name=csrf-token]').content;
@@ -52,7 +50,7 @@ class ShowRawfile extends React.Component {
             });
           });
       })
-      .catch(() => history.push('/'));
+      .catch(() => navigate('/'));
   }
 
   suggestTrainings = () => {
@@ -211,8 +209,15 @@ class ShowRawfile extends React.Component {
   }
 }
 ShowRawfile.propTypes = {
-  match: PropTypes.shape().isRequired,
-  history: PropTypes.shape().isRequired,
+  params: PropTypes.shape().isRequired,
+  navigate: PropTypes.func.isRequired,
 };
 
-export default ShowRawfile;
+export default function wrapper() {
+  return (
+    <ShowRawfile
+      navigate={useNavigate()}
+      params={useParams()}
+    />
+  );
+}

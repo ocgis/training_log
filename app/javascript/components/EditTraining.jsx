@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import TrainingForm from './TrainingForm';
 import TopMenu from './TopMenu';
@@ -15,11 +16,9 @@ class EditTraining extends React.Component {
   }
 
   componentDidMount() {
-    const { history } = this.props;
     const {
-      match: {
-        params: { id },
-      },
+      params: { id },
+      navigate,
     } = this.props;
 
     const url = `/api/v1/trainings/${id}`;
@@ -34,7 +33,7 @@ class EditTraining extends React.Component {
       .then((response) => {
         this.setState({ training: response });
       })
-      .catch(() => history.push('/'));
+      .catch(() => navigate('/'));
   }
 
   render() {
@@ -57,8 +56,15 @@ class EditTraining extends React.Component {
   }
 }
 EditTraining.propTypes = {
-  match: PropTypes.shape().isRequired,
-  history: PropTypes.shape().isRequired,
+  params: PropTypes.shape().isRequired,
+  navigate: PropTypes.func.isRequired,
 };
 
-export default EditTraining;
+export default function wrapper() {
+  return (
+    <EditTraining
+      navigate={useNavigate()}
+      params={useParams()}
+    />
+  );
+}

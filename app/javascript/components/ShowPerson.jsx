@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import 'antd/dist/antd.css';
 import { TrainingsList } from './Training';
 import TopMenu from './TopMenu';
@@ -13,10 +13,8 @@ class ShowPerson extends React.Component {
 
   componentDidMount() {
     const {
-      match: {
-        params: { id },
-      },
-      history,
+      params: { id },
+      navigate,
     } = this.props;
 
     const url = `/api/v1/people/${id}`;
@@ -31,15 +29,13 @@ class ShowPerson extends React.Component {
       .then((response) => {
         this.setState({ person: response });
       })
-      .catch(() => history.push('/'));
+      .catch(() => navigate('/'));
   }
 
   render() {
     const { person } = this.state;
     const {
-      match: {
-        params: { id },
-      },
+      params: { id },
     } = this.props;
 
     if (person !== null) {
@@ -63,8 +59,15 @@ class ShowPerson extends React.Component {
   }
 }
 ShowPerson.propTypes = {
-  match: PropTypes.shape().isRequired,
-  history: PropTypes.shape().isRequired,
+  params: PropTypes.shape().isRequired,
+  navigate: PropTypes.func.isRequired,
 };
 
-export default ShowPerson;
+export default function wrapper() {
+  return (
+    <ShowPerson
+      navigate={useNavigate()}
+      params={useParams()}
+    />
+  );
+}
