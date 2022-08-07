@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import {
-  Map, Marker, Polyline, Popup, TileLayer,
+  MapContainer, Marker, Polyline, Popup, TileLayer,
 } from 'react-leaflet';
 
 function Route(props) {
@@ -27,7 +27,7 @@ function Route(props) {
           Edit
         </Link>
       </div>
-      <Map
+      <MapContainer
         center={startPosition}
         zoom={13}
         scrollWheelZoom={false}
@@ -40,7 +40,7 @@ function Route(props) {
           <Popup>Start</Popup>
         </Marker>
         <Polyline positions={polyline} />
-      </Map>
+      </MapContainer>
     </div>
   );
 }
