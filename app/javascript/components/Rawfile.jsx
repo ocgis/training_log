@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  Map, Marker, Polyline, Popup, TileLayer,
+  MapContainer, Marker, Polyline, Popup, TileLayer,
 } from 'react-leaflet';
 import { Descriptions, Table } from 'antd';
 import { toHHMMSS, toSpeed } from './Conversions';
@@ -225,7 +225,7 @@ function ShowFitfile(props) {
   // Remove? const date = new Date(fitfile.activities[0].timestamp * 1000).toISOString();
   return (
     <div>
-      <Map
+      <MapContainer
         center={polyline[0]}
         zoom={13}
         scrollWheelZoom={false}
@@ -238,7 +238,7 @@ function ShowFitfile(props) {
           <Popup>Start</Popup>
         </Marker>
         <Polyline positions={polyline} />
-      </Map>
+      </MapContainer>
       <ActivityDescription activity={fitfile.activities[0]} />
       <SessionDescription session={fitfile.sessions[0]} />
       <LapsTable laps={fitfile.laps} />
