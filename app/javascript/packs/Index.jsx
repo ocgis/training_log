@@ -1,10 +1,12 @@
-import React from "react";
-import { render } from "react-dom";
-import App from "../components/App";
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import App from '../components/App';
 
-document.addEventListener("DOMContentLoaded", () => {
-  render(
-    <App />,
-    document.body.appendChild(document.createElement("div"))
+document.addEventListener('DOMContentLoaded', () => {
+  const root = createRoot(document.body.appendChild(document.createElement('div')));
+  root.render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>,
   );
 });
