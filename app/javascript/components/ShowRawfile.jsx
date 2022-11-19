@@ -63,11 +63,27 @@ class ShowRawfile extends React.Component {
       );
     }
     if (createNewTraining) {
+      const toKind = (s) => {
+        const intToStr = {
+          0: 'Aktivitet',
+          1: 'Löpning',
+          2: 'Cykling',
+          5: 'Simning',
+          11: 'Promenad',
+          17: 'Vandring',
+        };
+
+        if (s in intToStr) {
+          return intToStr[s];
+        }
+        return 'Okänt';
+      };
+
       const activity = rawfile.fitfile.activities[0];
       const session = rawfile.fitfile.sessions[0];
       const { laps } = rawfile.fitfile;
       const training = {
-        kind: 'Löpning', // FIXME
+        kind: toKind(session.sport),
         date: toDateTime(activity.local_timestamp),
         duration_s: activity.total_timer_time,
         distance_m: session.total_distance,
