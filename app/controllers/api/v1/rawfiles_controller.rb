@@ -20,12 +20,10 @@ class Api::V1::RawfilesController < ApplicationController
     render json: @rawfile.all_attributes.update({fitfile: fitfile})
   end
 
-
   def index
-    @rawfiles = Rawfile.all
+    @rawfiles = Rawfile.all.order(created_at: :desc)
     render json: @rawfiles
   end
-
 
   def update
     if @rawfile.update(rawfile_params)
